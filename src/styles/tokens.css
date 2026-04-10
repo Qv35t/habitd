@@ -1,0 +1,51 @@
+:root {
+  /* === BACKGROUNDS === */
+  --bg-base:    #000000;
+  --bg-panel:   #080808;
+  --bg-control: #0f0f0f;
+  --bg-hover:   #111111;
+
+  /* === TEXT HIERARCHY === */
+  --text-primary:   #e8e8e8;
+  --text-secondary: #888888;
+  --text-muted:     #444444;
+  --text-label:     #aaaaaa;
+  --text-accent:    #c8c8c8;
+
+  /* === BORDERS === */
+  --border-subtle:  #1a1a1a;
+  --border-default: #2a2a2a;
+  --border-active:  #555555;
+
+  /* === ACCENT STATES === */
+  --accent-dim:    #666666;
+  --accent-bright: #e8e8e8;
+  --accent-red:    #884444;
+  --accent-red-bg: #3a1a1a;
+
+  /* === TYPOGRAPHY === */
+  --font-mono: 'JetBrains Mono', 'Courier New', monospace;
+  --font-size-xs:   10px;
+  --font-size-sm:   11px;
+  --font-size-base: 12px;
+  --font-size-md:   13px;
+  --font-weight-light:  300;
+  --font-weight-normal: 400;
+
+  /* === SPACING === */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-6: 24px;
+  --sp-8: 32px;
+
+  /* === LAYOUT === */
+  --sidebar-w:   200px;
+  --statusbar-h: 28px;
+  --content-max: 900px;
+
+  /* === TRANSITIONS === */
+  --transition-fast:   80ms ease;
+  --transition-normal: 150ms ease;
+}

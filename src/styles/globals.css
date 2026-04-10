@@ -1,0 +1,89 @@
+@import "./tokens.css";
+@import "./reset.css";
+@import "tailwindcss";
+
+/* === LAYOUT PRIMITIVES === */
+
+.app-shell {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.app-body {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+.app-sidebar {
+  width: var(--sidebar-w);
+  min-width: var(--sidebar-w);
+  border-right: 1px solid var(--border-subtle);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  background: var(--bg-panel);
+}
+
+.app-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--sp-4) var(--sp-6);
+  max-width: var(--content-max);
+}
+
+.app-statusbar {
+  height: var(--statusbar-h);
+  border-top: 1px solid var(--border-subtle);
+  background: var(--bg-panel);
+  display: flex;
+  align-items: center;
+  padding: 0 var(--sp-4);
+  color: var(--text-muted);
+  font-size: var(--font-size-xs);
+  gap: var(--sp-4);
+}
+
+/* === TERMINAL SECTION HEADERS === */
+
+.section-header {
+  color: var(--text-muted);
+  font-size: var(--font-size-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: var(--sp-3) var(--sp-4) var(--sp-2);
+  user-select: none;
+}
+
+.section-header::before {
+  content: '– ';
+}
+
+/* === NAV ITEMS === */
+
+.nav-item {
+  display: block;
+  padding: var(--sp-1) var(--sp-4);
+  color: var(--text-muted);
+  font-size: var(--font-size-sm);
+  cursor: pointer;
+  transition: color var(--transition-fast);
+}
+
+.nav-item:hover {
+  color: var(--text-secondary);
+}
+
+.nav-item.active {
+  color: var(--text-primary);
+}
+
+.nav-item.active::before {
+  content: '• ';
+}
+
+.nav-item:not(.active)::before {
+  content: '  ';
+}
