@@ -135,3 +135,23 @@ export async function getCompletedDatesForHabit(habitId: string): Promise<string
     .toArray()
   return completions.map((c) => c.date).sort()
 }
+
+/**
+ * Returns ALL completions for ALL habits within a given month.
+ * Used by CalendarView to build the completion map for the entire grid.
+ * `monthStart` and `monthEnd` are YYYY-MM-DD strings (inclusive).
+ * Reactively updates via useLiveQuery.
+ */
+export function useCompletionsForMonth(
+  monthStart: string,
+  monthEnd: string
+): Completion[] | undefined {
+  return useLiveQuery(
+    () =>
+      db.completions
+        .where('date')
+        .between(monthStart, monthEnd, true, true)
+        .toArray(),
+    [monthStart, monthEnd]
+  )
+}

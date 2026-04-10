@@ -9,6 +9,7 @@
  * DOES NOT store: habits[], completions[] — those are Dexie via useLiveQuery.
  */
 import { create } from 'zustand'
+import { todayYearMonth } from '@/utils/calendar'
 import type { Habit } from '@/types'
 
 type ActiveView = 'habits' | 'calendar' | 'stats' | 'settings'
@@ -34,6 +35,13 @@ interface UIStore {
   openEditModal: (habit: Habit) => void
   openConfirmDeleteModal: (habitId: string, habitName: string) => void
   closeModal: () => void
+
+  // Calendar navigation state
+  calendarYear: number
+  calendarMonth: number         // 0-indexed (JS convention): Jan=0, Dec=11
+  selectedCalendarDate: string | null  // YYYY-MM-DD or null
+  setCalendarMonth: (year: number, month: number) => void
+  setSelectedCalendarDate: (date: string | null) => void
 }
 
 export const useUIStore = create<UIStore>((set) => ({
@@ -49,4 +57,10 @@ export const useUIStore = create<UIStore>((set) => ({
   openConfirmDeleteModal: (habitId, habitName) =>
     set({ modal: { type: 'confirmDelete', habitId, habitName } }),
   closeModal: () => set({ modal: { type: 'closed' } }),
+
+  calendarYear: todayYearMonth().year,
+  calendarMonth: todayYearMonth().month,
+  selectedCalendarDate: null,
+  setCalendarMonth: (year, month) => set({ calendarYear: year, calendarMonth: month }),
+  setSelectedCalendarDate: (date) => set({ selectedCalendarDate: date }),
 }))

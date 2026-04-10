@@ -64,3 +64,23 @@ export type AccentChar = 'dim' | 'bright'
 
 export const HABIT_SYMBOLS = ['●', '◆', '✦', '▪', '○', '◇', '⬡'] as const
 export type HabitSymbol = typeof HABIT_SYMBOLS[number]
+
+/**
+ * Calendar utility type — represents one cell in the MonthGrid.
+ */
+export interface CalendarDay {
+  date: string           // YYYY-MM-DD
+  dayOfMonth: number     // 1–31
+  isCurrentMonth: boolean
+  isToday: boolean
+  isFuture: boolean
+}
+
+/**
+ * Aggregated per-day data passed to DayCell.
+ */
+export interface DayCellData {
+  day: CalendarDay
+  completionCount: number    // how many habits completed on this date
+  totalActiveHabits: number  // denominator for the bar
+}
