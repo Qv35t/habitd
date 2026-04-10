@@ -1,27 +1,52 @@
+/**
+ * useUIStore — global UI state (NOT habit data).
+ *
+ * Stores:
+ *  - activeView: current navigation screen
+ *  - selectedDate: selected date (for Calendar view)
+ *  - modal: modal dialog state (add/edit/confirm)
+ *
+ * DOES NOT store: habits[], completions[] — those are Dexie via useLiveQuery.
+ */
 import { create } from 'zustand'
-import type { ViewName } from '@/types'
-import { format } from 'date-fns'
+import type { Habit } from '@/types'
 
-interface UIState {
-  activeView: ViewName
-  selectedDate: string       // 'YYYY-MM-DD'
-  isHabitFormOpen: boolean
-  editingHabitId: string | null
+type ActiveView = 'habits' | 'calendar' | 'stats' | 'settings'
 
-  setActiveView: (view: ViewName) => void
-  setSelectedDate: (date: string) => void
-  openHabitForm: (habitId?: string) => void
-  closeHabitForm: () => void
+type ModalState =
+  | { type: 'closed' }
+  | { type: 'add' }
+  | { type: 'edit'; habit: Habit }
+  | { type: 'confirmDelete'; habitId: string; habitName: string }
+
+interface UIStore {
+  // Navigation
+  activeView: ActiveView
+  setActiveView: (view: ActiveView) => void
+
+  // Date selection (Calendar view)
+  selectedDate: string | null
+  setSelectedDate: (date: string | null) => void
+
+  // Modal state
+  modal: ModalState
+  openAddModal: () => void
+  openEditModal: (habit: Habit) => void
+  openConfirmDeleteModal: (habitId: string, habitName: string) => void
+  closeModal: () => void
 }
 
-export const useUIStore = create<UIState>((set) => ({
+export const useUIStore = create<UIStore>((set) => ({
   activeView: 'habits',
-  selectedDate: format(new Date(), 'yyyy-MM-dd'),
-  isHabitFormOpen: false,
-  editingHabitId: null,
-
   setActiveView: (view) => set({ activeView: view }),
+
+  selectedDate: null,
   setSelectedDate: (date) => set({ selectedDate: date }),
-  openHabitForm: (habitId) => set({ isHabitFormOpen: true, editingHabitId: habitId ?? null }),
-  closeHabitForm: () => set({ isHabitFormOpen: false, editingHabitId: null }),
+
+  modal: { type: 'closed' },
+  openAddModal: () => set({ modal: { type: 'add' } }),
+  openEditModal: (habit) => set({ modal: { type: 'edit', habit } }),
+  openConfirmDeleteModal: (habitId, habitName) =>
+    set({ modal: { type: 'confirmDelete', habitId, habitName } }),
+  closeModal: () => set({ modal: { type: 'closed' } }),
 }))

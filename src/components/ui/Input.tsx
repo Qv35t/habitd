@@ -1,28 +1,33 @@
-import { forwardRef, type InputHTMLAttributes } from 'react'
+import type { InputHTMLAttributes } from 'react'
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string
   error?: string
 }
 
-export const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ label, error, className = '', ...props }, ref) => (
-    <div className="flex flex-col gap-[var(--sp-1)]">
+/**
+ * Terminal-style text input with optional label and error message.
+ */
+export function Input({ label, error, id, className = '', ...props }: InputProps) {
+  const inputId = id ?? label?.toLowerCase().replace(/\s+/g, '-')
+
+  return (
+    <div className="field">
       {label && (
-        <label className="text-[var(--font-size-xs)] text-[var(--text-muted)] uppercase tracking-widest">
+        <label className="field-label" htmlFor={inputId}>
           {label}
         </label>
       )}
       <input
-        ref={ref}
-        className={`bg-[var(--bg-control)] border border-[var(--border-default)] text-[var(--text-primary)] px-[var(--sp-2)] py-[var(--sp-1)] font-mono text-[var(--font-size-base)] outline-none focus:border-[var(--border-active)] transition-colors duration-[var(--transition-fast)] ${className}`}
+        id={inputId}
+        className={`field-input ${error ? 'field-input--error' : ''} ${className}`}
         {...props}
       />
       {error && (
-        <span className="text-[var(--font-size-xs)] text-[var(--accent-red)]">{error}</span>
+        <span className="field-error" role="alert">
+          {error}
+        </span>
       )}
     </div>
   )
-)
-
-Input.displayName = 'Input'
+}

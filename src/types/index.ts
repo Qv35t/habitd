@@ -6,7 +6,7 @@ export interface Habit {
   symbol: string       // Single unicode char: '●' | '◆' | '✦' | '▪' | '○' | '◇' | '⬡'
   accentChar: string   // CSS class modifier: 'dim' | 'bright'
   createdAt: string    // ISO date 'YYYY-MM-DD'
-  archivedAt?: string  // ISO date, undefined = active
+  archivedAt: string   // '' = active, 'YYYY-MM-DD' = archived
   sortOrder: number    // Manual sort position (ASC)
 }
 

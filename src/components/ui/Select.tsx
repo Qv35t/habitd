@@ -1,31 +1,45 @@
-import { forwardRef, type SelectHTMLAttributes } from 'react'
+import type { SelectHTMLAttributes } from 'react'
+
+interface SelectOption {
+  value: string
+  label: string
+}
 
 interface SelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
   label?: string
-  options: { value: string; label: string }[]
+  error?: string
+  options: SelectOption[]
 }
 
-export const Select = forwardRef<HTMLSelectElement, SelectProps>(
-  ({ label, options, className = '', ...props }, ref) => (
-    <div className="flex flex-col gap-[var(--sp-1)]">
+/**
+ * Terminal-style select dropdown. Used for habit symbol picker.
+ */
+export function Select({ label, error, options, id, className = '', ...props }: SelectProps) {
+  const selectId = id ?? label?.toLowerCase().replace(/\s+/g, '-')
+
+  return (
+    <div className="field">
       {label && (
-        <label className="text-[var(--font-size-xs)] text-[var(--text-muted)] uppercase tracking-widest">
+        <label className="field-label" htmlFor={selectId}>
           {label}
         </label>
       )}
       <select
-        ref={ref}
-        className={`bg-[var(--bg-control)] border border-[var(--border-default)] text-[var(--text-primary)] px-[var(--sp-2)] py-[var(--sp-1)] font-mono text-[var(--font-size-base)] outline-none focus:border-[var(--border-active)] transition-colors duration-[var(--transition-fast)] ${className}`}
+        id={selectId}
+        className={`field-input field-select ${error ? 'field-input--error' : ''} ${className}`}
         {...props}
       >
         {options.map((opt) => (
-          <option key={opt.value} value={opt.value} style={{ background: 'var(--bg-control)' }}>
+          <option key={opt.value} value={opt.value}>
             {opt.label}
           </option>
         ))}
       </select>
+      {error && (
+        <span className="field-error" role="alert">
+          {error}
+        </span>
+      )}
     </div>
   )
-)
-
-Select.displayName = 'Select'
+}

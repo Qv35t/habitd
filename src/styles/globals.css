@@ -87,3 +87,402 @@
 .nav-item:not(.active)::before {
   content: '  ';
 }
+
+/* === BUTTONS === */
+
+.btn {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-sm);
+  padding: var(--sp-1) var(--sp-3);
+  border: 1px solid var(--border-default);
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  border-radius: 0;
+  transition: color 80ms, border-color 80ms;
+  white-space: nowrap;
+  line-height: 1.6;
+}
+.btn:hover:not(:disabled) {
+  color: var(--text-primary);
+  border-color: var(--border-active);
+}
+.btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.btn--ghost {
+  border-color: transparent;
+}
+.btn--ghost:hover:not(:disabled) {
+  border-color: transparent;
+  color: var(--text-primary);
+}
+.btn--danger {
+  border-color: #3a1a1a;
+  color: #884444;
+}
+.btn--danger:hover:not(:disabled) {
+  border-color: #5a2a2a;
+  color: #cc6666;
+}
+.btn--active {
+  border-color: var(--border-active);
+  color: var(--text-primary);
+}
+
+/* === FORM FIELDS === */
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+}
+.field-label {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.field-input {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-sm);
+  color: var(--text-primary);
+  background: var(--bg-control);
+  border: 1px solid var(--border-default);
+  border-radius: 0;
+  padding: var(--sp-1) var(--sp-2);
+  outline: none;
+  transition: border-color 80ms;
+}
+.field-input:focus {
+  border-color: var(--border-active);
+}
+.field-input--error {
+  border-color: #5a2a2a;
+}
+.field-error {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+  color: #884444;
+}
+.field-select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23888'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  padding-right: 24px;
+  cursor: pointer;
+}
+
+/* === MODAL === */
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+.modal-panel {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-default);
+  min-width: 360px;
+  max-width: 520px;
+  width: 100%;
+}
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--sp-2) var(--sp-3);
+  border-bottom: 1px solid var(--border-subtle);
+}
+.modal-title {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-sm);
+  color: var(--text-muted);
+  text-transform: lowercase;
+}
+.modal-close {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 18px;
+  cursor: pointer;
+  padding: 0 var(--sp-1);
+  line-height: 1;
+  font-family: var(--font-mono);
+}
+.modal-close:hover {
+  color: var(--text-primary);
+}
+.modal-body {
+  padding: var(--sp-4);
+}
+
+/* === DIVIDER === */
+
+.divider {
+  border: none;
+  border-top: 1px solid var(--border-subtle);
+  margin: var(--sp-3) 0;
+}
+
+/* === HABIT DOTS === */
+
+.habit-dots {
+  display: flex;
+  gap: var(--sp-1);
+  align-items: center;
+}
+.habit-dot {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-base);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 2px;
+  line-height: 1;
+  color: var(--text-muted);
+  transition: color 60ms;
+  border-radius: 0;
+  min-width: 18px;
+  text-align: center;
+}
+.habit-dot:hover {
+  color: var(--text-primary);
+}
+.habit-dot--filled {
+  color: var(--text-primary);
+}
+.habit-dot--today {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.habit-dot:focus-visible {
+  outline: 1px solid var(--border-active);
+  outline-offset: 1px;
+}
+
+/* === HABIT ROW === */
+
+.habit-row {
+  display: grid;
+  grid-template-columns: 20px 1fr auto auto 28px;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-2) var(--sp-3);
+  border-bottom: 1px solid var(--border-subtle);
+  min-height: 36px;
+  transition: background 60ms;
+}
+.habit-row:hover {
+  background: var(--bg-hover);
+}
+.habit-row--dim .habit-symbol {
+  color: var(--text-muted);
+}
+.habit-row--bright .habit-symbol {
+  color: var(--text-primary);
+}
+.habit-symbol {
+  font-size: var(--font-size-base);
+  font-family: var(--font-mono);
+  text-align: center;
+}
+.habit-name {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-sm);
+  color: var(--text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.habit-streak {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+  color: var(--text-muted);
+  min-width: 28px;
+  text-align: right;
+  white-space: nowrap;
+}
+
+/* === CONTEXT MENU === */
+
+.habit-menu {
+  position: relative;
+}
+.habit-menu-trigger {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: var(--font-size-md);
+  cursor: pointer;
+  padding: 0 4px;
+  line-height: 1;
+  border-radius: 0;
+  font-family: var(--font-mono);
+}
+.habit-menu-trigger:hover {
+  color: var(--text-primary);
+}
+.habit-menu-dropdown {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 2px);
+  background: var(--bg-panel);
+  border: 1px solid var(--border-default);
+  z-index: 50;
+  min-width: 110px;
+  display: flex;
+  flex-direction: column;
+}
+.habit-menu-item {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  background: transparent;
+  border: none;
+  padding: var(--sp-1) var(--sp-3);
+  text-align: left;
+  cursor: pointer;
+  border-radius: 0;
+  transition: background 60ms;
+}
+.habit-menu-item:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+.habit-menu-item--danger {
+  color: #884444;
+}
+.habit-menu-item--danger:hover {
+  color: #cc6666;
+  background: var(--bg-hover);
+}
+
+/* === HABIT LIST === */
+
+.habit-list {
+  display: flex;
+  flex-direction: column;
+}
+.habit-list-loading,
+.habit-list-empty {
+  padding: var(--sp-6) var(--sp-4);
+  font-family: var(--font-mono);
+  font-size: var(--font-size-sm);
+  color: var(--text-muted);
+}
+.habit-list-empty {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+.habit-list-add {
+  padding: var(--sp-2) var(--sp-3);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+/* === HABIT FORM === */
+
+.habit-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+.habit-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-3);
+}
+.habit-form-actions {
+  display: flex;
+  gap: var(--sp-2);
+  justify-content: flex-start;
+}
+
+/* === SECTION HEADER (with button) === */
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--sp-2) var(--sp-3);
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border-subtle);
+  text-transform: lowercase;
+  letter-spacing: 0.02em;
+}
+.section-header span:first-child::before {
+  content: '– ';
+}
+
+/* === CONFIRM DIALOG === */
+
+.confirm-dialog {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+.confirm-text {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-sm);
+  color: var(--text-primary);
+}
+.confirm-text strong {
+  font-weight: 400;
+  color: var(--text-accent);
+}
+.confirm-subtext {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+  color: var(--text-muted);
+}
+.confirm-actions {
+  display: flex;
+  gap: var(--sp-2);
+}
+
+/* === STATUSBAR (enhanced) === */
+
+.app-statusbar {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: 0 var(--sp-3);
+  height: 24px;
+  background: var(--bg-panel);
+  border-top: 1px solid var(--border-subtle);
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+.statusbar-brand {
+  color: var(--text-secondary);
+  font-weight: 400;
+}
+.statusbar-sep {
+  color: var(--border-default);
+}
+.statusbar-value {
+  color: var(--text-primary);
+}
+.statusbar-version {
+  margin-left: auto;
+}
+
+/* === UTILITY === */
+
+.text-muted {
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: var(--font-size-sm);
+}

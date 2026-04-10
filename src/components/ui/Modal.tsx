@@ -1,5 +1,4 @@
-import { type ReactNode, useEffect } from 'react'
-import { createPortal } from 'react-dom'
+import { useEffect, type ReactNode } from 'react'
 
 interface ModalProps {
   isOpen: boolean
@@ -8,34 +7,48 @@ interface ModalProps {
   children: ReactNode
 }
 
+/**
+ * Terminal-style modal overlay.
+ * Closes on Escape key and backdrop click.
+ */
 export function Modal({ isOpen, onClose, title, children }: ModalProps) {
   useEffect(() => {
-    const handleEsc = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
-    if (isOpen) document.addEventListener('keydown', handleEsc)
-    return () => document.removeEventListener('keydown', handleEsc)
+    if (!isOpen) return
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose()
+    }
+    document.addEventListener('keydown', handleKeyDown)
+    return () => document.removeEventListener('keydown', handleKeyDown)
   }, [isOpen, onClose])
 
   if (!isOpen) return null
 
-  return createPortal(
+  return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center"
-      style={{ background: 'rgba(0,0,0,0.8)' }}
-      onClick={(e) => { if (e.target === e.currentTarget) onClose() }}
+      className="modal-backdrop"
+      role="dialog"
+      aria-modal="true"
+      aria-label={title ?? 'Dialog'}
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose()
+      }}
     >
-      <div
-        className="bg-[var(--bg-panel)] border border-[var(--border-default)] p-[var(--sp-4)] min-w-[320px] max-w-[480px] w-full mx-[var(--sp-4)]"
-        role="dialog"
-        aria-modal="true"
-      >
+      <div className="modal-panel">
         {title && (
-          <div className="text-[var(--font-size-xs)] text-[var(--text-muted)] uppercase tracking-widest mb-[var(--sp-3)] border-b border-[var(--border-subtle)] pb-[var(--sp-2)]">
-            {title}
+          <div className="modal-header">
+            <span className="modal-title">– {title}</span>
+            <button
+              className="modal-close"
+              onClick={onClose}
+              aria-label="Close dialog"
+            >
+              ×
+            </button>
           </div>
         )}
-        {children}
+        <div className="modal-body">{children}</div>
       </div>
-    </div>,
-    document.body
+    </div>
   )
 }
