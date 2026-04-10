@@ -84,3 +84,69 @@ export interface DayCellData {
   completionCount: number    // how many habits completed on this date
   totalActiveHabits: number  // denominator for the bar
 }
+
+// ── Phase 5: Stats View Types ──────────────────────────────
+
+export type StatsPeriod = '7d' | '30d' | '90d' | 'all'
+
+export const STATS_PERIOD_DAYS: Record<StatsPeriod, number> = {
+  '7d':  7,
+  '30d': 30,
+  '90d': 90,
+  'all': 0,
+}
+
+export type HabitFilter = 'active' | 'archived' | 'all'
+
+export interface HabitStatsRow {
+  habit: Habit
+  currentStreak: number
+  longestStreak: number
+  completionRate: number
+  totalCompletions: number
+  firstCompletionDate: string | null
+}
+
+export interface GlobalSummaryData {
+  totalDaysTracked: number
+  overallCompletionRate: number
+  bestCurrentStreak: number
+  bestCurrentStreakHabitName: string | null
+  bestLongestStreak: number
+  bestLongestStreakHabitName: string | null
+  activeHabitsCount: number
+  archivedHabitsCount: number
+  totalCompletionsAllTime: number
+}
+
+export interface TopStreakEntry {
+  habit: Habit
+  currentStreak: number
+  longestStreak: number
+}
+
+export interface HeatmapCell {
+  date: string
+  count: number
+  level: 0 | 1 | 2 | 3 | 4
+  char: string
+  isToday: boolean
+  isFuture: boolean
+}
+
+export interface HeatmapWeek {
+  weekIndex: number
+  cells: HeatmapCell[]
+}
+
+export interface StatsViewData {
+  isLoading: boolean
+  summary: GlobalSummaryData
+  heatmapData: Record<string, number>
+  heatmapMaxCount: number
+  heatmapWeeks: HeatmapWeek[]
+  habitStats: HabitStatsRow[]
+  top3ByCurrentStreak: TopStreakEntry[]
+  period: StatsPeriod
+  today: string
+}

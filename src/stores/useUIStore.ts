@@ -10,7 +10,7 @@
  */
 import { create } from 'zustand'
 import { todayYearMonth } from '@/utils/calendar'
-import type { Habit } from '@/types'
+import type { Habit, StatsPeriod, HabitFilter } from '@/types'
 
 type ActiveView = 'habits' | 'calendar' | 'stats' | 'settings'
 
@@ -42,6 +42,12 @@ interface UIStore {
   selectedCalendarDate: string | null  // YYYY-MM-DD or null
   setCalendarMonth: (year: number, month: number) => void
   setSelectedCalendarDate: (date: string | null) => void
+
+  // Stats view filters
+  statsPeriod: StatsPeriod
+  statsHabitFilter: HabitFilter
+  setStatsPeriod: (p: StatsPeriod) => void
+  setStatsHabitFilter: (f: HabitFilter) => void
 }
 
 export const useUIStore = create<UIStore>((set) => ({
@@ -63,4 +69,9 @@ export const useUIStore = create<UIStore>((set) => ({
   selectedCalendarDate: null,
   setCalendarMonth: (year, month) => set({ calendarYear: year, calendarMonth: month }),
   setSelectedCalendarDate: (date) => set({ selectedCalendarDate: date }),
+
+  statsPeriod: '30d',
+  statsHabitFilter: 'active',
+  setStatsPeriod: (p) => set({ statsPeriod: p }),
+  setStatsHabitFilter: (f) => set({ statsHabitFilter: f }),
 }))
