@@ -25,18 +25,36 @@ export interface HabitWithStats {
   totalCompletions: number
 }
 
+/**
+ * Computed stats for a single habit.
+ * Result of computeHabitStats() in streakEngine.ts.
+ */
 export interface HabitStats {
+  habit: Habit
+  /** Sorted ASC, deduplicated array of completion dates 'YYYY-MM-DD' */
+  completedDates: string[]
+  /** Days in current unbroken streak (today or yesterday must be completed) */
   currentStreak: number
+  /** Longest unbroken streak ever */
   longestStreak: number
+  /** Completion rate for last 30 days (0-100, one decimal) */
   completionRate: number
+  /** Total unique completion days (all time) */
   totalCompletions: number
 }
 
+/**
+ * Aggregated stats across all active habits.
+ * Result of computeGlobalStats() in streakEngine.ts.
+ */
 export interface StatsData {
   totalHabits: number
   activeHabits: number
-  heatmapData: Record<string, number>  // date → count of completions
-  topStreakHabit: HabitWithStats | null
+  /** date → number of habits completed on that date */
+  heatmapData: Record<string, number>
+  /** Habit with the highest current streak among active habits */
+  topStreakHabit: HabitStats | null
+  /** Average completionRate across all active habits */
   overallCompletionRate: number
 }
 
