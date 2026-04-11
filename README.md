@@ -6,6 +6,57 @@ terminal-style habit tracker. local-first. no accounts. no cloud.
 
 ## quick start
 
+**step 1 — install prerequisites**
+
+<details>
+<summary>Windows (PowerShell)</summary>
+
+```powershell
+# Node.js 20 LTS via winget
+winget install OpenJS.NodeJS.LTS
+
+# or via nvm-windows: https://github.com/coreybutler/nvm-windows
+nvm install 20
+nvm use 20
+
+# pnpm
+npm install -g pnpm@latest
+```
+
+</details>
+
+<details>
+<summary>Linux (Ubuntu / Debian / WSL2)</summary>
+
+```bash
+# Node.js 20 LTS via nvm
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+source ~/.bashrc
+nvm install 20 && nvm use 20
+
+# pnpm
+npm install -g pnpm@latest
+```
+
+</details>
+
+<details>
+<summary>macOS</summary>
+
+```bash
+# Node.js 20 LTS via Homebrew
+brew install node@20
+echo 'export PATH="/opt/homebrew/opt/node@20/bin:$PATH"' >> ~/.zshrc
+source ~/.zshrc
+
+# pnpm
+npm install -g pnpm@latest
+```
+
+</details>
+
+**step 2 — clone and run**
+
 ```bash
 git clone https://github.com/Qv35t/habitd
 cd habitd
@@ -16,19 +67,6 @@ pnpm dev
 open http://localhost:5173
 
 requires: Node.js 20+ · pnpm 10+
-
----
-
-### one-click launchers
-
-| File | OS | Run |
-| :-- | :-- | :-- |
-| `start.bat` | Windows | Double-click |
-| `start.sh` | Linux / macOS | `./start.sh` |
-| `start.mjs` | Any | `node start.mjs` |
-
-**Linux/macOS:** `chmod +x start.sh && ./start.sh`
-**Windows:** double-click `start.bat`
 
 ---
 
@@ -99,10 +137,6 @@ output is a static `dist/` folder — serve with any static host or `npx serve d
 ```bash
 pnpm build && npx serve dist
 ```
-
-**Linux:** `chmod +x start.sh && ./start.sh`
-**Windows:** double-click `start.bat`
-**macOS:** `chmod +x start.sh && ./start.sh`
 
 All data stored locally in IndexedDB. No server, no cloud.
 
