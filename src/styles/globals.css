@@ -1275,9 +1275,9 @@
 
 .heatmap-grid {
   display: grid;
-  grid-template-columns: repeat(52, auto);
   grid-auto-flow: column;
   gap: 2px;
+  /* grid-template-columns задаётся inline в компоненте (52 или 53 недели) */
 }
 
 /* ── Phase 8: HomeView ────────────────────────── */

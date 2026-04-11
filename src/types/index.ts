@@ -134,9 +134,14 @@ export interface HeatmapCell {
   isFuture: boolean
 }
 
+/**
+ * One column (Mon–Sun) in the calendar-year heatmap.
+ * weekIndex: 0-based index within the year grid (0–51 for 52-week years,
+ * 0–52 for 53-week years like 2015, 2026).
+ */
 export interface HeatmapWeek {
-  weekIndex: number
-  cells: HeatmapCell[]
+  weekIndex: number  // 0-based, max 52 for 53-week years
+  cells: HeatmapCell[]  // always 7 items (Mon–Sun)
 }
 
 export interface StatsViewData {

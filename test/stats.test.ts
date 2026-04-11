@@ -76,9 +76,10 @@ describe('resolvePeriodDays', () => {
 // ─────────────────────────────────────────────
 
 describe('buildHeatmapWeeks', () => {
-  it('returns exactly 52 weeks', () => {
+  it('returns 52 or 53 weeks for a full calendar year', () => {
     const weeks = buildHeatmapWeeks({}, 0, TODAY)
-    expect(weeks).toHaveLength(52)
+    expect(weeks.length).toBeGreaterThanOrEqual(52)
+    expect(weeks.length).toBeLessThanOrEqual(53)
   })
 
   it('each week has exactly 7 cells', () => {
@@ -123,15 +124,56 @@ describe('buildHeatmapWeeks', () => {
     expect(todayCells[0].char).toBe('█')
   })
 
-  it('first week starts on a Monday', () => {
+  it('first week starts on a Monday at or before Jan 1 of today\'s year', () => {
     const weeks = buildHeatmapWeeks({}, 0, TODAY)
-    const firstCellDate = new Date(weeks[0].cells[0].date)
-    expect(firstCellDate.getDay()).toBe(1) // 1 = Monday
+    const first = new Date(weeks[0].cells[0].date)
+    const year = new Date(TODAY).getFullYear()
+    const jan1 = new Date(year, 0, 1)
+    expect(first.getDay()).toBe(1)
+    expect(first.getTime()).toBeLessThanOrEqual(jan1.getTime())
   })
 
-  it('weekIndex increments 0 to 51', () => {
+  it('last week ends on a Sunday at or after Dec 31 of today\'s year', () => {
+    const weeks = buildHeatmapWeeks({}, 0, TODAY)
+    const lastCell = weeks[weeks.length - 1].cells[6]
+    const year = new Date(TODAY).getFullYear()
+    const dec31 = new Date(year, 11, 31)
+    const lastDate = new Date(lastCell.date)
+    expect(lastDate.getDay()).toBe(0)
+    expect(lastDate.getTime()).toBeGreaterThanOrEqual(dec31.getTime())
+  })
+
+  it('grid contains Jan 1 of today\'s year', () => {
+    const weeks = buildHeatmapWeeks({}, 0, TODAY)
+    const year = new Date(TODAY).getFullYear()
+    const jan1 = `${year}-01-01`
+    const allDates = weeks.flatMap(w => w.cells.map(c => c.date))
+    expect(allDates).toContain(jan1)
+  })
+
+  it('grid contains Dec 31 of today\'s year', () => {
+    const weeks = buildHeatmapWeeks({}, 0, TODAY)
+    const year = new Date(TODAY).getFullYear()
+    const dec31 = `${year}-12-31`
+    const allDates = weeks.flatMap(w => w.cells.map(c => c.date))
+    expect(allDates).toContain(dec31)
+  })
+
+  it('future cells have char "·" (HEATMAPCHARS[0])', () => {
+    const weeks = buildHeatmapWeeks({}, 0, TODAY)
+    const futureCells = weeks.flatMap(w => w.cells.filter(c => c.isFuture))
+    expect(futureCells.length).toBeGreaterThan(0)
+    futureCells.forEach(c => {
+      expect(c.char).toBe('·')
+      expect(c.count).toBe(0)
+      expect(c.level).toBe(0)
+    })
+  })
+
+  it('weekIndex is sequential from 0', () => {
     const weeks = buildHeatmapWeeks({}, 0, TODAY)
     weeks.forEach((w, i) => expect(w.weekIndex).toBe(i))
+    expect(weeks[weeks.length - 1].weekIndex).toBe(weeks.length - 1)
   })
 })
 

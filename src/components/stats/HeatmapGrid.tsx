@@ -19,7 +19,7 @@ const levelColors = [
 /**
  * 52-week ASCII heatmap grid, GitHub-style, terminal-aesthetic.
  */
-export function HeatmapGrid({ weeks, today: _today }: HeatmapGridProps) {
+export function HeatmapGrid({ weeks, today }: HeatmapGridProps) {
   const { t, i18n } = useTranslation()
   const locale = i18n.language === 'ru' ? ruLocale : undefined
 
@@ -40,13 +40,16 @@ export function HeatmapGrid({ weeks, today: _today }: HeatmapGridProps) {
   return (
     <div className="heatmap-container">
       <div className="heatmap-header">
-        {t('stats.activity')} ({t('stats.weeksLabel')})
+        {t('stats.activity')} {new Date(today).getFullYear()}
       </div>
 
       {/* Month labels row */}
       <div className="heatmap-months" aria-hidden="true">
         <div className="heatmap-months__spacer" />
-        <div className="heatmap-months__labels">
+        <div
+          className="heatmap-months__labels"
+          style={{ gridTemplateColumns: `repeat(${weeks.length}, auto)` }}
+        >
           {monthLabels.map(({ weekIndex, label }) => (
             <span
               key={weekIndex}
@@ -71,7 +74,12 @@ export function HeatmapGrid({ weeks, today: _today }: HeatmapGridProps) {
         </div>
 
         {/* 52-week grid */}
-        <div className="heatmap-grid" role="img" aria-label="52-week activity heatmap">
+        <div
+          className="heatmap-grid"
+          style={{ gridTemplateColumns: `repeat(${weeks.length}, auto)` }}
+          role="img"
+          aria-label="Calendar year activity heatmap"
+        >
           {weeks.map((week) => (
             <div key={week.weekIndex} className="heatmap-week" style={{ gridColumn: week.weekIndex + 1 }}>
               {week.cells.map((cell) => (

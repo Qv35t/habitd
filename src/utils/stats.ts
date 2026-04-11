@@ -5,7 +5,6 @@
 import {
   parseISO,
   differenceInCalendarDays,
-  subDays,
   eachDayOfInterval,
   startOfWeek,
   endOfWeek,
@@ -47,17 +46,17 @@ export function resolvePeriodDays(
 }
 
 /**
- * Build the 52-week heatmap grid (Mon → Sun columns, oldest week first).
+ * Build the calendar-year heatmap grid (Mon–Sun columns, Jan 1 → Dec 31).
+ * gridStart = Monday of the ISO week that contains Jan 1 of today's year.
+ * gridEnd   = Sunday of the ISO week that contains Dec 31 of today's year.
+ * A full year produces 52 or 53 complete weeks (364–371 cells).
+ * Future days (after today) have isFuture=true, count=0, level=0, char='.'.
+ * Past days with no data also have count=0, level=0, char='.'.
  *
- * Week 0 starts 51 weeks before the week containing `today`.
- * Each week has exactly 7 HeatmapCell objects.
- * Days in the future have isFuture=true and count=0.
- * Days before any data also have count=0 (level=0, char='·').
- *
- * @param heatmapData - Record<'YYYY-MM-DD', number> from calcHeatmap()
- * @param maxCount - maximum value in heatmapData (for level normalization)
- * @param today - 'YYYY-MM-DD'
- * @returns HeatmapWeek[] array of length 52
+ * @param heatmapData - Record<YYYY-MM-DD, number> from calcHeatmap
+ * @param maxCount    - maximum value in heatmapData for level normalisation
+ * @param today       - current date as YYYY-MM-DD (no new Date() inside)
+ * @returns HeatmapWeek[] — 52 or 53 weeks covering Jan 1 → Dec 31
  */
 export function buildHeatmapWeeks(
   heatmapData: Record<string, number>,
@@ -65,12 +64,11 @@ export function buildHeatmapWeeks(
   today: string
 ): HeatmapWeek[] {
   const todayDate = parseISO(today)
+  const year = todayDate.getFullYear()
 
-  // End = end of the week containing today (Sunday)
-  const gridEnd = endOfWeek(todayDate, { weekStartsOn: 1 })
-
-  // Start = Monday 51 weeks before the week that contains today
-  const gridStart = startOfWeek(subDays(gridEnd, 51 * 7), { weekStartsOn: 1 })
+  // Grid bounds: full calendar year
+  const gridStart = startOfWeek(new Date(year, 0, 1), { weekStartsOn: 1 })
+  const gridEnd = endOfWeek(new Date(year, 11, 31), { weekStartsOn: 1 })
 
   const allDays = eachDayOfInterval({ start: gridStart, end: gridEnd })
 
