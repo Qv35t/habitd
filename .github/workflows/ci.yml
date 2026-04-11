@@ -2,37 +2,41 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches: ["**"]
   pull_request:
-    branches: [main]
+    branches: ["**"]
 
 jobs:
   ci:
+    name: typecheck · lint · test · build
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - uses: pnpm/action-setup@v4
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
         with:
           version: 10
 
-      - uses: actions/setup-node@v4
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
         with:
-          node-version: 20
-          cache: 'pnpm'
+          node-version: "20"
+          cache: "pnpm"
 
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
 
-      - name: Type check
+      - name: TypeScript — type check
         run: pnpm type-check
 
-      - name: Lint
+      - name: ESLint — lint
         run: pnpm lint
 
-      - name: Test
+      - name: Vitest — run tests
         run: pnpm test:run
 
-      - name: Build
+      - name: Vite — build
         run: pnpm build
