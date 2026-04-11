@@ -10,7 +10,7 @@
  */
 import { create } from 'zustand'
 import { todayYearMonth } from '@/utils/calendar'
-import type { Habit, StatsPeriod, HabitFilter } from '@/types'
+import type { Habit, StatsPeriod, HabitFilter, SettingsSection, ConfirmModalState, ImportResult } from '@/types'
 
 type ActiveView = 'habits' | 'calendar' | 'stats' | 'settings'
 
@@ -48,6 +48,15 @@ interface UIStore {
   statsHabitFilter: HabitFilter
   setStatsPeriod: (p: StatsPeriod) => void
   setStatsHabitFilter: (f: HabitFilter) => void
+
+  // Settings view state (Phase 6)
+  settingsSection: SettingsSection
+  confirmModal: ConfirmModalState | null
+  importResult: ImportResult
+  setSettingsSection: (s: SettingsSection) => void
+  openConfirmModal: (state: ConfirmModalState) => void
+  closeConfirmModal: () => void
+  setImportResult: (r: ImportResult) => void
 }
 
 export const useUIStore = create<UIStore>((set) => ({
@@ -74,4 +83,13 @@ export const useUIStore = create<UIStore>((set) => ({
   statsHabitFilter: 'active',
   setStatsPeriod: (p) => set({ statsPeriod: p }),
   setStatsHabitFilter: (f) => set({ statsHabitFilter: f }),
+
+  // Phase 6 settings state
+  settingsSection: 'data',
+  confirmModal: null,
+  importResult: { status: 'idle', habitsImported: 0, completionsImported: 0 },
+  setSettingsSection: (s) => set({ settingsSection: s }),
+  openConfirmModal: (state) => set({ confirmModal: state }),
+  closeConfirmModal: () => set({ confirmModal: null }),
+  setImportResult: (r) => set({ importResult: r }),
 }))

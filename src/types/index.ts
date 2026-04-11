@@ -150,3 +150,34 @@ export interface StatsViewData {
   period: StatsPeriod
   today: string
 }
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  PHASE 6 — Settings & Export Types
+// ═══════════════════════════════════════════════════════════════════════════
+
+export type SettingsSection = 'data' | 'habits' | 'danger'
+
+export interface BackupData {
+  version: 1
+  exportedAt: string
+  habits: Habit[]
+  completions: Completion[]
+}
+
+export type ImportStatus = 'success' | 'error' | 'idle'
+
+export interface ImportResult {
+  status: ImportStatus
+  habitsImported: number
+  completionsImported: number
+  errorMessage?: string
+}
+
+export interface ConfirmModalState {
+  title: string
+  description: string
+  confirmLabel: string
+  keyword?: string
+  isDangerous: boolean
+  onConfirm: () => void | Promise<void>
+}

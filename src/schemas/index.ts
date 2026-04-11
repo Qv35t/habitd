@@ -63,3 +63,30 @@ export function validateCompletion(input: unknown): CompletionInput {
   }
   return result.data
 }
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  PHASE 6 — Backup Validation Schemas
+// ═══════════════════════════════════════════════════════════════════════════
+
+export const BackupHabitSchema = z.object({
+  id:          z.string().min(1),
+  name:        z.string().min(1).max(80),
+  symbol:      z.string().min(1).max(2),
+  accentChar:  z.string().min(1),
+  createdAt:   z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'must be YYYY-MM-DD'),
+  archivedAt:  z.string().optional(),
+  sortOrder:   z.number().int(),
+})
+
+export const BackupCompletionSchema = z.object({
+  id:      z.string().min(1),
+  habitId: z.string().min(1),
+  date:    z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'must be YYYY-MM-DD'),
+})
+
+export const BackupDataSchema = z.object({
+  version:     z.literal(1),
+  exportedAt:  z.string().min(1),
+  habits:      z.array(BackupHabitSchema),
+  completions: z.array(BackupCompletionSchema),
+})
