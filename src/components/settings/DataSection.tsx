@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Button } from '@/components/ui/Button'
 import { useUIStore } from '@/stores/useUIStore'
 import { exportToJSON, importFromJSON, exportToMarkdown } from '@/utils/export'
@@ -7,6 +8,7 @@ import { exportToJSON, importFromJSON, exportToMarkdown } from '@/utils/export'
  * DataSection — JSON export/import and Markdown export actions.
  */
 export function DataSection() {
+  const { t } = useTranslation()
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [isImporting, setIsImporting] = useState(false)
   const { importResult, setImportResult } = useUIStore()
@@ -22,24 +24,23 @@ export function DataSection() {
     const result = await importFromJSON(file)
     setImportResult(result)
     setIsImporting(false)
-    // Reset input so same file can be re-imported
     e.target.value = ''
   }
 
   return (
     <section className="settings-section">
-      <div className="settings-section-label">– data</div>
+      <div className="settings-section-label">– {t('settings.data')}</div>
 
       <div className="settings-action-row">
-        <Button onClick={() => exportToJSON()}>[export json]</Button>
+        <Button onClick={() => exportToJSON()}>{t('settings.exportJson')}</Button>
         <span className="settings-action-description">
-          export all habits &amp; logs to .json
+          {t('settings.exportJsonDesc')}
         </span>
       </div>
 
       <div className="settings-action-row">
         <Button onClick={handleImportClick} disabled={isImporting}>
-          {isImporting ? '[importing...]' : '[import json]'}
+          {isImporting ? `${t('common.save')}...` : t('settings.importJson')}
         </Button>
         <input
           type="file"
@@ -49,14 +50,14 @@ export function DataSection() {
           onChange={handleFileChange}
         />
         <span className="settings-action-description">
-          restore from a habitd backup file
+          {t('settings.importJsonDesc')}
         </span>
       </div>
 
       <div className="settings-action-row">
-        <Button onClick={() => exportToMarkdown()}>[export markdown]</Button>
+        <Button onClick={() => exportToMarkdown()}>{t('settings.exportMd')}</Button>
         <span className="settings-action-description">
-          plain-text habit report
+          {t('settings.exportMdDesc')}
         </span>
       </div>
 

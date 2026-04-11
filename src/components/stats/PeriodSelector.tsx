@@ -1,31 +1,34 @@
 import type { StatsPeriod } from '@/types'
+import { useTranslation } from 'react-i18next'
 
 interface PeriodSelectorProps {
   value: StatsPeriod
   onChange: (p: StatsPeriod) => void
 }
 
-const PERIODS: StatsPeriod[] = ['7d', '30d', '90d', 'all']
-
 /**
  * Segmented period filter: 7d / 30d / 90d / all.
- * 'all' button shows tooltip explaining rate calculation basis.
  */
 export function PeriodSelector({ value, onChange }: PeriodSelectorProps) {
+  const { t } = useTranslation()
+
+  const periods: { value: StatsPeriod; label: string }[] = [
+    { value: '7d', label: t('stats.period.7d') },
+    { value: '30d', label: t('stats.period.30d') },
+    { value: '90d', label: t('stats.period.90d') },
+    { value: 'all', label: t('stats.period.all') },
+  ]
+
   return (
     <div className="segmented-control">
-      {PERIODS.map((p) => (
+      {periods.map(({ value: p, label }) => (
         <button
           key={p}
           className={`segmented-control__btn ${value === p ? 'segmented-control__btn--active' : ''}`}
           onClick={() => onChange(p)}
-          title={
-            p === 'all'
-              ? "completion rate calculated from your earliest habit's start date"
-              : undefined
-          }
+          title={p === 'all' ? t('stats.allTime') : undefined}
         >
-          {p}
+          {label}
         </button>
       ))}
     </div>

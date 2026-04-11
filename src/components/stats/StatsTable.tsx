@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import type { HabitStatsRow, StatsPeriod } from '@/types'
 import { CompletionBar } from './CompletionBar'
+import { useTranslation } from 'react-i18next'
 
 type SortCol = 'name' | 'currentStreak' | 'longestStreak' | 'completionRate' | 'total'
 
@@ -11,9 +12,9 @@ interface StatsTableProps {
 
 /**
  * Per-habit statistics table with sortable columns.
- * Uses div role="table" (not HTML table element) for monospace grid alignment.
  */
 export function StatsTable({ rows }: StatsTableProps) {
+  const { t } = useTranslation()
   const [sort, setSort] = useState<{ col: SortCol; dir: 'asc' | 'desc' }>({
     col: 'currentStreak',
     dir: 'desc',
@@ -68,13 +69,13 @@ export function StatsTable({ rows }: StatsTableProps) {
   if (sorted.length === 0) {
     return (
       <div className="stats-table-empty">
-        no habits match the current filter
+        {t('stats.noHabitsMatch')}
       </div>
     )
   }
 
   return (
-    <div className="stats-table" role="table" aria-label="Habit statistics">
+    <div className="stats-table" role="table" aria-label={t('stats.habits')}>
       {/* Header */}
       <div className="stats-table__header" role="row">
         <button className="stats-table__col stats-table__col--symbol" role="columnheader">
@@ -85,35 +86,35 @@ export function StatsTable({ rows }: StatsTableProps) {
           role="columnheader"
           onClick={() => handleSort('name')}
         >
-          name{sortIndicator('name')}
+          {t('stats.habits')}{sortIndicator('name')}
         </button>
         <button
           className="stats-table__col stats-table__col--streak"
           role="columnheader"
           onClick={() => handleSort('currentStreak')}
         >
-          cur{sortIndicator('currentStreak')}
+          {t('stats.currentStreak')}{sortIndicator('currentStreak')}
         </button>
         <button
           className="stats-table__col stats-table__col--streak"
           role="columnheader"
           onClick={() => handleSort('longestStreak')}
         >
-          max{sortIndicator('longestStreak')}
+          {t('stats.longestStreak')}{sortIndicator('longestStreak')}
         </button>
         <button
           className="stats-table__col stats-table__col--rate"
           role="columnheader"
           onClick={() => handleSort('completionRate')}
         >
-          rate{sortIndicator('completionRate')}
+          {t('stats.rate')}{sortIndicator('completionRate')}
         </button>
         <button
           className="stats-table__col stats-table__col--total"
           role="columnheader"
           onClick={() => handleSort('total')}
         >
-          total{sortIndicator('total')}
+          {t('stats.total')}{sortIndicator('total')}
         </button>
       </div>
 
@@ -133,7 +134,7 @@ export function StatsTable({ rows }: StatsTableProps) {
               {row.habit.name}
             </div>
             <div className="stats-table__cell stats-table__col--streak">
-              {row.currentStreak > 0 ? `${row.currentStreak}d` : '–'}
+              {row.currentStreak > 0 ? `${row.currentStreak}d` : t('stats.noData')}
             </div>
             <div className="stats-table__cell stats-table__col--streak">
               {row.longestStreak}d

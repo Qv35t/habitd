@@ -1,13 +1,14 @@
 import { format, startOfMonth, endOfMonth } from 'date-fns'
+import { ru as ruLocale } from 'date-fns/locale'
 import { useUIStore } from '@/stores/useUIStore'
 import { useActiveHabits } from '@/hooks/useHabits'
 import { useCompletionsForMonth } from '@/hooks/useCompletions'
 import { MonthGrid } from '@/components/calendar/MonthGrid'
 import { DayDetailPanel } from '@/components/calendar/DayDetailPanel'
 import { Button } from '@/components/ui/Button'
+import { useTranslation } from 'react-i18next'
 import {
   getCalendarDays,
-  getMonthLabel,
   nextMonth,
   prevMonth,
   todayYearMonth,
@@ -16,12 +17,11 @@ import {
 
 /**
  * CalendarView — full month calendar with day detail panel.
- *
- * State (Zustand): calendarYear, calendarMonth, selectedCalendarDate
- * Data (Dexie via useLiveQuery): active habits, completions for month
- * Utilities (pure): getCalendarDays, buildCompletionMap, navigation helpers
  */
 export function CalendarView() {
+  const { t, i18n } = useTranslation()
+  const locale = i18n.language === 'ru' ? ruLocale : undefined
+
   const {
     calendarYear,
     calendarMonth,
@@ -41,7 +41,11 @@ export function CalendarView() {
   const completionMap = buildCompletionMap(completionDates)
 
   const calendarDays = getCalendarDays(calendarYear, calendarMonth)
-  const monthLabel = getMonthLabel(calendarYear, calendarMonth)
+  const monthLabel = format(
+    new Date(calendarYear, calendarMonth, 1),
+    'LLLL yyyy',
+    { locale }
+  )
 
   const today = todayYearMonth()
 
@@ -78,16 +82,16 @@ export function CalendarView() {
       <div className="calendar-view">
         {/* Navigation bar */}
         <div className="calendar-nav">
-          <Button variant="ghost" onClick={goToPrevMonth} aria-label="Previous month">
-            ◄
+          <Button variant="ghost" onClick={goToPrevMonth} aria-label={t('calendar.prevMonth')}>
+            {t('calendar.prevMonth')}
           </Button>
           <span className="calendar-nav__label">{monthLabel.toLowerCase()}</span>
-          <Button variant="ghost" onClick={goToNextMonth} aria-label="Next month">
-            ►
+          <Button variant="ghost" onClick={goToNextMonth} aria-label={t('calendar.nextMonth')}>
+            {t('calendar.nextMonth')}
           </Button>
           {!isCurrentMonthView && (
             <Button variant="ghost" onClick={goToToday}>
-              [today]
+              [{t('calendar.today')}]
             </Button>
           )}
         </div>

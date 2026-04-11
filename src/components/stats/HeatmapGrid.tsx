@@ -1,5 +1,7 @@
 import type { HeatmapWeek } from '@/types'
 import { format, parseISO } from 'date-fns'
+import { ru as ruLocale } from 'date-fns/locale'
+import { useTranslation } from 'react-i18next'
 
 interface HeatmapGridProps {
   weeks: HeatmapWeek[]
@@ -14,15 +16,13 @@ const levelColors = [
   '#8ecc8e',           // 4
 ]
 
-const DAY_LABELS = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su']
-const HEATMAP_LEGEND = ['·', '░', '▒', '▓', '█']
-
 /**
  * 52-week ASCII heatmap grid, GitHub-style, terminal-aesthetic.
- * Renders HeatmapWeek[] from useStatsData.
- * Rows: days of week (Mon→Sun), Columns: weeks (oldest→newest).
  */
 export function HeatmapGrid({ weeks, today: _today }: HeatmapGridProps) {
+  const { t, i18n } = useTranslation()
+  const locale = i18n.language === 'ru' ? ruLocale : undefined
+
   // Build month labels — show label when month changes from previous week
   const monthLabels: { weekIndex: number; label: string }[] = []
   let prevMonth = ''
@@ -30,7 +30,7 @@ export function HeatmapGrid({ weeks, today: _today }: HeatmapGridProps) {
   for (const week of weeks) {
     if (week.cells.length === 0) continue
     const firstCellDate = parseISO(week.cells[0].date)
-    const month = format(firstCellDate, 'MMM')
+    const month = format(firstCellDate, 'MMM', { locale })
     if (month !== prevMonth) {
       monthLabels.push({ weekIndex: week.weekIndex, label: month })
       prevMonth = month
@@ -39,7 +39,9 @@ export function HeatmapGrid({ weeks, today: _today }: HeatmapGridProps) {
 
   return (
     <div className="heatmap-container">
-      <div className="heatmap-header">– activity (52 weeks)</div>
+      <div className="heatmap-header">
+        {t('stats.activity')} ({t('stats.weeksLabel')})
+      </div>
 
       {/* Month labels row */}
       <div className="heatmap-months" aria-hidden="true">
@@ -61,14 +63,14 @@ export function HeatmapGrid({ weeks, today: _today }: HeatmapGridProps) {
       <div className="heatmap-body">
         {/* Row labels column */}
         <div className="heatmap-row-labels" aria-hidden="true">
-          {DAY_LABELS.map((label) => (
+          {['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'].map((label) => (
             <span key={label} className="heatmap-row-label">
               {label}
             </span>
           ))}
         </div>
 
-        {/* 52-week grid: each week is a column, each day is a row within the column */}
+        {/* 52-week grid */}
         <div className="heatmap-grid" role="img" aria-label="52-week activity heatmap">
           {weeks.map((week) => (
             <div key={week.weekIndex} className="heatmap-week" style={{ gridColumn: week.weekIndex + 1 }}>
@@ -92,13 +94,13 @@ export function HeatmapGrid({ weeks, today: _today }: HeatmapGridProps) {
 
       {/* Legend */}
       <div className="heatmap-legend">
-        <span>less </span>
-        {HEATMAP_LEGEND.map((char, i) => (
+        <span>{t('stats.less')} </span>
+        {['·', '░', '▒', '▓', '█'].map((char, i) => (
           <span key={i} style={{ color: levelColors[i] }}>
             {char}
           </span>
         ))}
-        <span> more</span>
+        <span> {t('stats.more')}</span>
       </div>
     </div>
   )

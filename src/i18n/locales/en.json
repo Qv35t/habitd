@@ -1,54 +1,127 @@
 {
   "nav": {
-    "home": "home", "habits": "habits", "calendar": "calendar",
-    "stats": "stats", "settings": "settings"
+    "home": "home",
+    "habits": "habits",
+    "calendar": "calendar",
+    "stats": "stats",
+    "settings": "settings"
   },
   "home": {
     "title": "HABITD",
     "subtitle": "local-first habit tracker",
     "sections": {
-      "habits":   { "key": "[h]", "label": "habits",   "desc": "manage your daily habits" },
-      "calendar": { "key": "[c]", "label": "calendar", "desc": "monthly overview with completion bars" },
-      "stats":    { "key": "[s]", "label": "stats",    "desc": "52-week heatmap and streaks" },
-      "settings": { "key": "[,]", "label": "settings", "desc": "export, import, reset, theme, language" }
+      "habits":   { "key": "h", "label": "habits",   "desc": "manage your daily habits" },
+      "calendar": { "key": "c", "label": "calendar", "desc": "monthly overview with completion bars" },
+      "stats":    { "key": "s", "label": "stats",    "desc": "52-week heatmap and streaks" },
+      "settings": { "key": ",", "label": "settings", "desc": "export, import, reset, theme, language" }
     },
-    "tip": "press [?] for hotkeys"
+    "tip": "press ? for hotkeys"
   },
   "habits": {
-    "empty": "no habits yet. press [n] to add one.",
-    "add": "add habit", "edit": "edit",
-    "delete": "delete", "archive": "archive", "today": "today",
-    "purge_all": "purge all archived"
+    "empty":   "no habits yet. press n to add one.",
+    "add":     "add habit",
+    "edit":    "edit",
+    "delete":  "delete",
+    "archive": "archive",
+    "today":   "today"
   },
   "help": {
-    "title": "keyboard shortcuts",
+    "title":      "keyboard shortcuts",
     "navigation": "navigation",
-    "actions": "actions",
+    "actions":    "actions",
     "keys": {
-      "wasd_arrows": "arrows / w s — move between habits",
-      "space":       "space — toggle today",
-      "n":           "[n] — new habit",
-      "e":           "[e] — edit selected",
-      "d":           "[d] — delete selected",
-      "question":    "[?] — toggle this panel",
-      "esc":         "[esc] — close modal",
-      "h":           "[h] — habits view",
-      "c":           "[c] — calendar view",
-      "s_view":      "[s] — stats view",
-      "comma":       "[,] — settings"
+      "wasdarrows": "w / s / arrows — move between habits",
+      "space":      "space — toggle today",
+      "n":          "n — new habit",
+      "e":          "e — edit selected",
+      "d":          "d — delete selected",
+      "question":   "? — toggle this panel",
+      "esc":        "esc — close modal",
+      "h":          "h — habits view",
+      "c":          "c — calendar view",
+      "sview":      "s — stats view",
+      "comma":      ", — settings"
+    }
+  },
+  "calendar": {
+    "title":         "calendar",
+    "prevMonth":     "<",
+    "nextMonth":     ">",
+    "today":         "today",
+    "weekdays":      ["mo", "tu", "we", "th", "fr", "sa", "su"],
+    "loading":       "loading...",
+    "noHabits":      "no habits tracked yet",
+    "futureNote":    "future date — read only",
+    "closePanel":    "close",
+    "habitsDone":    "done",
+    "habitsNotDone": "—"
+  },
+  "stats": {
+    "title":             "stats",
+    "loading":           "loading stats...",
+    "summary":           "summary",
+    "tracked":           "tracked",
+    "days":              "days",
+    "since":             "since",
+    "overallRate":       "overall rate",
+    "lastPeriod":        "last {{period}}",
+    "allTime":           "all time",
+    "bestStreak":        "best streak",
+    "activity":          "activity",
+    "weeksLabel":        "52 weeks",
+    "less":              "less",
+    "more":              "more",
+    "topStreaks":        "top streaks",
+    "habits":            "habits",
+    "currentStreak":     "cur",
+    "longestStreak":     "max",
+    "rate":              "rate",
+    "total":             "total",
+    "noHabitsMatch":     "no habits match the current filter",
+    "noData":            "—",
+    "currentStreakFull": "current streak",
+    "longestStreakFull": "longest streak",
+    "days_one":          "day",
+    "days_other":        "days",
+    "filter": {
+      "active":   "active",
+      "archived": "archived",
+      "all":      "all"
+    },
+    "period": {
+      "7d":  "7d",
+      "30d": "30d",
+      "90d": "90d",
+      "all": "all"
     }
   },
   "settings": {
-    "title": "settings", "theme": "theme", "language": "language",
-    "export": "export", "import": "import", "reset": "reset all data",
-    "themes": { "terminal-dark": "terminal dark", "terminal-dim": "terminal dim" },
-    "languages": { "en": "english", "ru": "русский" },
-    "danger_zone": "danger zone",
-    "reset_desc": "permanently delete all habits & logs",
-    "reset_warning": "type \"reset\" in the confirmation dialog to proceed",
-    "no_archived": "no archived habits"
+    "title":          "settings",
+    "theme":          "theme",
+    "language":       "language",
+    "export":         "export",
+    "import":         "import",
+    "reset":          "reset data",
+    "themes":         { "terminal-dark": "terminal dark", "terminal-dim": "terminal dim" },
+    "languages":      { "en": "english", "ru": "русский" },
+    "data":           "data",
+    "exportJson":     "[export json]",
+    "exportJsonDesc": "export all habits & logs to .json",
+    "importJson":     "[import json]",
+    "importJsonDesc": "restore from a habitd backup file",
+    "exportMd":       "[export markdown]",
+    "exportMdDesc":   "plain-text habit report",
+    "archiveSection": "привычки",
+    "noArchived":     "нет архивных привычек",
+    "dangerZone":     "опасная зона",
+    "resetBtn":       "[сбросить данные]",
+    "resetDesc":      "навсегда удалить все привычки и записи",
+    "resetHint":      "введите \"reset\" в диалоге подтверждения для продолжения"
   },
   "common": {
-    "confirm": "confirm", "cancel": "cancel", "save": "save", "close": "close"
+    "confirm": "confirm",
+    "cancel":  "cancel",
+    "save":    "save",
+    "close":   "close"
   }
 }

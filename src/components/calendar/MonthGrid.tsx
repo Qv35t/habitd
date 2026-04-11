@@ -1,5 +1,6 @@
 import type { CalendarDay } from '@/types'
 import { DayCell } from './DayCell'
+import { useTranslation } from 'react-i18next'
 
 interface MonthGridProps {
   days: CalendarDay[]
@@ -9,11 +10,8 @@ interface MonthGridProps {
   onDayClick: (date: string) => void
 }
 
-const WEEKDAY_HEADERS = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'] as const
-
 /**
  * Terminal-style month grid. Pure presentational component.
- * 7 columns, Monday start. Header row + day cells.
  */
 export function MonthGrid({
   days,
@@ -22,11 +20,14 @@ export function MonthGrid({
   selectedDate,
   onDayClick,
 }: MonthGridProps) {
+  const { t } = useTranslation()
+  const weekdays = t('calendar.weekdays', { returnObjects: true }) as string[]
+
   return (
-    <div className="month-grid" role="grid" aria-label="Calendar month">
+    <div className="month-grid" role="grid" aria-label={t('calendar.title')}>
       {/* Header row */}
       <div className="month-grid__header" role="row">
-        {WEEKDAY_HEADERS.map((label) => (
+        {weekdays.map((label) => (
           <div
             key={label}
             className="month-grid__weekday"

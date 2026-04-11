@@ -1,7 +1,9 @@
 import { format, parseISO, isValid } from 'date-fns'
+import { ru as ruLocale } from 'date-fns/locale'
 import { useActiveHabits } from '@/hooks/useHabits'
 import { useCompletionsForDate, toggleCompletion } from '@/hooks/useCompletions'
 import { Button } from '@/components/ui/Button'
+import { useTranslation } from 'react-i18next'
 
 interface DayDetailPanelProps {
   date: string
@@ -13,6 +15,9 @@ interface DayDetailPanelProps {
  * for the selected calendar date.
  */
 export function DayDetailPanel({ date, onClose }: DayDetailPanelProps) {
+  const { t, i18n } = useTranslation()
+  const locale = i18n.language === 'ru' ? ruLocale : undefined
+
   const habits = useActiveHabits()
   const completions = useCompletionsForDate(date)
 
@@ -20,7 +25,7 @@ export function DayDetailPanel({ date, onClose }: DayDetailPanelProps) {
 
   const parsedDate = parseISO(date)
   const formattedDate = isValid(parsedDate)
-    ? format(parsedDate, 'EEE dd MMM yyyy')
+    ? format(parsedDate, 'EEE dd MMM yyyy', { locale })
     : date
 
   const today = format(new Date(), 'yyyy-MM-dd')
@@ -32,14 +37,14 @@ export function DayDetailPanel({ date, onClose }: DayDetailPanelProps) {
   }
 
   return (
-    <aside className="day-detail-panel" aria-label={`Habit completions for ${formattedDate}`}>
+    <aside className="day-detail-panel" aria-label={t('calendar.title')}>
       {/* Header */}
       <div className="day-detail-panel__header">
         <span className="day-detail-panel__date">{formattedDate}</span>
         <button
           className="day-detail-panel__close"
           onClick={onClose}
-          aria-label="Close day detail panel"
+          aria-label={t('calendar.closePanel')}
         >
           ×
         </button>
@@ -49,17 +54,17 @@ export function DayDetailPanel({ date, onClose }: DayDetailPanelProps) {
 
       {/* Future warning */}
       {isFuture && (
-        <p className="day-detail-panel__future-note">(future date — read only)</p>
+        <p className="day-detail-panel__future-note">{t('calendar.futureNote')}</p>
       )}
 
       {/* Habit list */}
       <ul className="day-detail-panel__list" role="list">
         {habits === undefined && (
-          <li className="day-detail-panel__loading">loading...</li>
+          <li className="day-detail-panel__loading">{t('calendar.loading')}</li>
         )}
 
         {habits?.length === 0 && (
-          <li className="day-detail-panel__empty">no habits tracked yet</li>
+          <li className="day-detail-panel__empty">{t('calendar.noHabits')}</li>
         )}
 
         {habits?.map((habit) => {
@@ -75,10 +80,10 @@ export function DayDetailPanel({ date, onClose }: DayDetailPanelProps) {
                 className="day-detail-panel__toggle"
                 onClick={() => handleToggle(habit.id)}
                 disabled={isFuture}
-                aria-label={`${done ? 'Unmark' : 'Mark'} ${habit.name} as done on ${formattedDate}`}
+                aria-label={`${done ? t('calendar.habitsDone') : t('calendar.habitsNotDone')} ${habit.name} ${formattedDate}`}
                 aria-pressed={done}
               >
-                {done ? 'done' : '    '}
+                {done ? t('calendar.habitsDone') : t('calendar.habitsNotDone')}
               </Button>
             </li>
           )

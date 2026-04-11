@@ -1,3 +1,5 @@
+import { useTranslation } from 'react-i18next'
+
 interface StreakCardProps {
   label: string
   currentStreak: number
@@ -7,11 +9,12 @@ interface StreakCardProps {
 
 /**
  * Displays current and longest streak for one habit or globally.
- * currentStreak === 0 renders as '–' not '0 days'.
  */
 export function StreakCard({ label, currentStreak, longestStreak, habitSymbol }: StreakCardProps) {
+  const { t } = useTranslation()
+
   const fmt = (n: number) =>
-    n === 0 ? '–' : `${n} ${n === 1 ? 'day' : 'days'}`
+    n === 0 ? t('stats.noData') : `${n} ${t('stats.days')}`
 
   return (
     <div className="streak-card">
@@ -19,12 +22,12 @@ export function StreakCard({ label, currentStreak, longestStreak, habitSymbol }:
         – {habitSymbol ? `${habitSymbol} ` : ''}{label}
       </div>
       <div className="streak-card__current">
-        <div className="streak-card__label">current streak</div>
+        <div className="streak-card__label">{t('stats.currentStreakFull')}</div>
         <div className="streak-card__value">{fmt(currentStreak)}</div>
       </div>
       <div className="streak-card__divider" aria-hidden="true" />
       <div className="streak-card__longest">
-        <div className="streak-card__label">longest streak</div>
+        <div className="streak-card__label">{t('stats.longestStreakFull')}</div>
         <div className="streak-card__value">{fmt(longestStreak)}</div>
       </div>
     </div>

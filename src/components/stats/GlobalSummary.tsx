@@ -1,54 +1,53 @@
 import type { GlobalSummaryData, StatsPeriod } from '@/types'
+import { useTranslation } from 'react-i18next'
 
 interface GlobalSummaryProps {
   data: GlobalSummaryData
   period: StatsPeriod
 }
 
-const periodLabel: Record<StatsPeriod, string> = {
-  '7d': 'last 7d',
-  '30d': 'last 30d',
-  '90d': 'last 90d',
-  'all': 'all time',
-}
-
 /**
  * Three summary metric cards at the top of StatsView.
- * tracked days | overall rate | best streak
  */
 export function GlobalSummary({ data, period }: GlobalSummaryProps) {
+  const { t } = useTranslation()
   const noData = data.totalDaysTracked === 0
+
+  const periodLabel =
+    period === 'all'
+      ? t('stats.allTime')
+      : t('stats.lastPeriod', { period: t(`stats.period.${period}`) })
 
   return (
     <div className="global-summary">
       {/* Card 1: Tracked */}
       <div className="global-summary__card">
-        <div className="global-summary__label">tracked</div>
+        <div className="global-summary__label">{t('stats.tracked')}</div>
         <div className="global-summary__value">
-          {noData ? '–' : `${data.totalDaysTracked} days`}
+          {noData ? t('stats.noData') : `${data.totalDaysTracked} ${t('stats.days')}`}
         </div>
         <div className="global-summary__sub">
-          {noData ? 'no data' : 'since tracking started'}
+          {noData ? t('stats.noData') : `${t('stats.since')} tracking started`}
         </div>
       </div>
 
       {/* Card 2: Overall rate */}
       <div className="global-summary__card">
-        <div className="global-summary__label">overall rate</div>
+        <div className="global-summary__label">{t('stats.overallRate')}</div>
         <div className="global-summary__value">
-          {noData ? '–' : `${data.overallCompletionRate.toFixed(1)}%`}
+          {noData ? t('stats.noData') : `${data.overallCompletionRate.toFixed(1)}%`}
         </div>
-        <div className="global-summary__sub">{periodLabel[period]}</div>
+        <div className="global-summary__sub">{periodLabel}</div>
       </div>
 
       {/* Card 3: Best streak */}
       <div className="global-summary__card">
-        <div className="global-summary__label">best streak</div>
+        <div className="global-summary__label">{t('stats.bestStreak')}</div>
         <div className="global-summary__value">
-          {noData ? '–' : `${data.bestCurrentStreak} days`}
+          {noData ? t('stats.noData') : `${data.bestCurrentStreak} ${t('stats.days')}`}
         </div>
         <div className="global-summary__sub">
-          {noData ? 'no data' : data.bestCurrentStreakHabitName ?? '–'}
+          {noData ? t('stats.noData') : data.bestCurrentStreakHabitName ?? t('stats.noData')}
         </div>
       </div>
     </div>
