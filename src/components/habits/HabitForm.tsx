@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Input } from '@/components/ui/Input'
 import { Select } from '@/components/ui/Select'
 import { Button } from '@/components/ui/Button'
@@ -26,6 +27,7 @@ interface HabitFormProps {
  * Validates with Zod HabitCreateSchema before writing to Dexie.
  */
 export function HabitForm({ mode, initialData, onClose }: HabitFormProps) {
+  const { t } = useTranslation()
   const [name, setName] = useState(initialData?.name ?? '')
   const [symbol, setSymbol] = useState(initialData?.symbol ?? '●')
   const [accentChar, setAccentChar] = useState<'dim' | 'bright'>(
@@ -105,10 +107,10 @@ export function HabitForm({ mode, initialData, onClose }: HabitFormProps) {
 
       <div className="habit-form-actions">
         <Button type="submit" variant="active" disabled={isLoading}>
-          {isLoading ? 'saving...' : mode === 'add' ? '[save]' : '[update]'}
+          {isLoading ? 'saving...' : mode === 'add' ? `[${t('common.save')}]` : `[${t('habits.edit')}]`}
         </Button>
         <Button type="button" variant="ghost" onClick={onClose} disabled={isLoading}>
-          [cancel]
+          [{t('common.cancel')}]
         </Button>
       </div>
     </form>

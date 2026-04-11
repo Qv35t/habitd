@@ -17,7 +17,8 @@
   "habits": {
     "empty": "no habits yet. press [n] to add one.",
     "add": "add habit", "edit": "edit",
-    "delete": "delete", "archive": "archive", "today": "today"
+    "delete": "delete", "archive": "archive", "today": "today",
+    "purge_all": "purge all archived"
   },
   "help": {
     "title": "keyboard shortcuts",
@@ -39,9 +40,13 @@
   },
   "settings": {
     "title": "settings", "theme": "theme", "language": "language",
-    "export": "export", "import": "import", "reset": "reset data",
+    "export": "export", "import": "import", "reset": "reset all data",
     "themes": { "terminal-dark": "terminal dark", "terminal-dim": "terminal dim" },
-    "languages": { "en": "english", "ru": "русский" }
+    "languages": { "en": "english", "ru": "русский" },
+    "danger_zone": "danger zone",
+    "reset_desc": "permanently delete all habits & logs",
+    "reset_warning": "type \"reset\" in the confirmation dialog to proceed",
+    "no_archived": "no archived habits"
   },
   "common": {
     "confirm": "confirm", "cancel": "cancel", "save": "save", "close": "close"

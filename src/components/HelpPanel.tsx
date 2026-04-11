@@ -25,7 +25,7 @@ export function HelpPanel() {
         <header className="help-header">
           <span className="help-title">{t('help.title')}</span>
           <button className="help-close" onClick={() => setHelpOpen(false)}>
-            [esc]
+            [{t('common.cancel')}]
           </button>
         </header>
         <section>

@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import type { Habit } from '@/types'
 import { restoreHabit, deleteHabit } from '@/hooks/useHabits'
 import { useUIStore } from '@/stores/useUIStore'
@@ -11,6 +12,7 @@ interface ArchivedHabitRowProps {
  * Single row for an archived habit with restore and delete actions.
  */
 export function ArchivedHabitRow({ habit }: ArchivedHabitRowProps) {
+  const { t } = useTranslation()
   const { openConfirmModal } = useUIStore()
 
   const handleRestore = async () => {
@@ -34,13 +36,13 @@ export function ArchivedHabitRow({ habit }: ArchivedHabitRowProps) {
       </span>
       <span className="archived-habit-row__name">{habit.name}</span>
       <span className="archived-habit-row__date">
-        archived {habit.archivedAt}
+        {t('habits.archive')} {habit.archivedAt}
       </span>
       <Button variant="ghost" onClick={handleRestore}>
-        [restore]
+        [{t('habits.edit')}]
       </Button>
       <Button variant="danger" onClick={handleDelete}>
-        [delete]
+        [{t('habits.delete')}]
       </Button>
     </div>
   )

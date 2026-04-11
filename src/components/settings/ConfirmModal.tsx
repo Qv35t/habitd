@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Modal } from '@/components/ui/Modal'
 import { Button } from '@/components/ui/Button'
 
@@ -27,6 +28,7 @@ export function ConfirmModal({
   onConfirm,
   onCancel,
 }: ConfirmModalProps) {
+  const { t } = useTranslation()
   const [typedKeyword, setTypedKeyword] = useState('')
   const inputRef = useRef<HTMLInputElement>(null)
 
@@ -77,7 +79,7 @@ export function ConfirmModal({
             {confirmLabel}
           </Button>
           <Button variant="ghost" onClick={onCancel}>
-            cancel
+            [{t('common.cancel')}]
           </Button>
         </div>
       </div>

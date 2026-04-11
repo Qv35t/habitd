@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import {
   DndContext,
   closestCenter,
@@ -30,6 +31,7 @@ import type { Completion } from '@/types'
  * HabitsView — main screen of the app with keyboard navigation and drag-and-drop.
  */
 export function HabitsView() {
+  const { t } = useTranslation()
   const { modal, openAddModal, closeModal, selectedHabitIndex, setSelectedHabitIndex } = useUIStore()
   const today = format(new Date(), 'yyyy-MM-dd')
   const sevenDaysAgo = format(subDays(new Date(), 6), 'yyyy-MM-dd')
@@ -87,7 +89,7 @@ export function HabitsView() {
     return (
       <main className="app-content" role="main">
         <div className="section-header">
-          <span>– habits</span>
+          <span>– {t('nav.habits')}</span>
         </div>
         <p className="text-muted">loading...</p>
       </main>
@@ -110,21 +112,23 @@ export function HabitsView() {
     return (
       <main className="app-content" role="main">
         <div className="section-header">
-          <span>– habits</span>
-          <Button variant="ghost" onClick={openAddModal} aria-label="Add new habit">
-            [+ add]
+          <span>– {t('nav.habits')}</span>
+          <Button variant="ghost" onClick={openAddModal} aria-label={t('habits.add')}>
+            [+ {t('habits.add')}]
           </Button>
         </div>
         <div className="habit-list-empty">
-          <p className="text-muted">no habits yet.</p>
-          <p className="text-muted">
-            press{' '}
-            <Button variant="ghost" onClick={openAddModal}>
-              [+ add habit]
-            </Button>{' '}
-            to get started.
-          </p>
+          <p className="text-muted">{t('habits.empty')}</p>
         </div>
+
+        {/* Modals must render even in empty state */}
+        <Modal
+          isOpen={modal.type === 'add'}
+          onClose={closeModal}
+          title={t('habits.add')}
+        >
+          <HabitForm mode="add" onClose={closeModal} />
+        </Modal>
       </main>
     )
   }
@@ -133,9 +137,9 @@ export function HabitsView() {
     <main className="app-content" role="main">
       {/* Section header */}
       <div className="section-header">
-        <span>– habits</span>
-        <Button variant="ghost" onClick={openAddModal} aria-label="Add new habit">
-          [+ add]
+        <span>– {t('nav.habits')}</span>
+        <Button variant="ghost" onClick={openAddModal} aria-label={t('habits.add')}>
+          [+ {t('habits.add')}]
         </Button>
       </div>
 
@@ -167,7 +171,7 @@ export function HabitsView() {
       {/* Add habit button */}
       <div className="habit-list-add">
         <Button variant="ghost" onClick={openAddModal}>
-          [+ add habit]
+          [+ {t('habits.add')}]
         </Button>
       </div>
 
@@ -175,7 +179,7 @@ export function HabitsView() {
       <Modal
         isOpen={modal.type === 'add'}
         onClose={closeModal}
-        title="add habit"
+        title={t('habits.add')}
       >
         <HabitForm mode="add" onClose={closeModal} />
       </Modal>
@@ -184,7 +188,7 @@ export function HabitsView() {
       <Modal
         isOpen={modal.type === 'edit'}
         onClose={closeModal}
-        title="edit habit"
+        title={t('habits.edit')}
       >
         {modal.type === 'edit' && (
           <HabitForm
@@ -199,25 +203,25 @@ export function HabitsView() {
       <Modal
         isOpen={modal.type === 'confirmDelete'}
         onClose={closeModal}
-        title="confirm delete"
+        title={t('habits.delete')}
       >
         {modal.type === 'confirmDelete' && (
           <div className="confirm-dialog">
             <p className="confirm-text">
-              delete <strong>{modal.habitName}</strong>?
+              {t('habits.delete')} <strong>{modal.habitName}</strong>?
             </p>
             <p className="confirm-subtext">
-              this will permanently remove the habit and all its completion history.
+              {t('habits.archive')} — {t('common.confirm').toLowerCase()}
             </p>
             <div className="confirm-actions">
               <Button
                 variant="danger"
                 onClick={() => handleConfirmDelete(modal.habitId)}
               >
-                [delete forever]
+                [{t('common.confirm')}]
               </Button>
               <Button variant="ghost" onClick={closeModal}>
-                [cancel]
+                [{t('common.cancel')}]
               </Button>
             </div>
           </div>

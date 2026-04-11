@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { useArchivedHabits } from '@/hooks/useArchivedHabits'
 import { useUIStore } from '@/stores/useUIStore'
 import { purgeArchivedHabits } from '@/utils/export'
@@ -9,13 +10,14 @@ import { Button } from '@/components/ui/Button'
  * and a purge-all action with keyword confirmation.
  */
 export function HabitsSection() {
+  const { t } = useTranslation()
   const archived = useArchivedHabits()
   const { openConfirmModal } = useUIStore()
 
   if (archived === undefined) {
     return (
       <section className="settings-section">
-        <div className="settings-section-label">– habits</div>
+        <div className="settings-section-label">– {t('nav.habits')}</div>
         <p className="text-muted">loading...</p>
       </section>
     )
@@ -36,10 +38,10 @@ export function HabitsSection() {
 
   return (
     <section className="settings-section">
-      <div className="settings-section-label">– habits</div>
+      <div className="settings-section-label">– {t('nav.habits')}</div>
 
       {archived.length === 0 ? (
-        <p className="text-muted">no archived habits</p>
+        <p className="text-muted">{t('settings.no_archived') ?? 'no archived habits'}</p>
       ) : (
         <>
           {archived.map((habit) => (
@@ -47,7 +49,7 @@ export function HabitsSection() {
           ))}
           <div className="settings-action-row">
             <Button variant="danger" onClick={handlePurge}>
-              [purge all archived]
+              [{t('habits.purge_all') ?? 'purge all archived'}]
             </Button>
           </div>
         </>
