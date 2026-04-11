@@ -1,27 +1,35 @@
-:root {
+:root,
+[data-theme="terminal-dark"] {
   /* === BACKGROUNDS === */
   --bg-base:    #000000;
   --bg-panel:   #080808;
   --bg-control: #0f0f0f;
   --bg-hover:   #111111;
+  --bg-surface:  #0d0d0d;
+  --bg-elevated: #1a1a1a;
 
   /* === TEXT HIERARCHY === */
-  --text-primary:   #e8e8e8;
-  --text-secondary: #888888;
-  --text-muted:     #444444;
-  --text-label:     #aaaaaa;
-  --text-accent:    #c8c8c8;
+  --text-primary:   #f0f0f0;
+  --text-secondary: #b0b0b0;
+  --text-muted:     #707070;
+  --text-label:     #c8c8c8;
+  --text-accent:    #e0e0e0;
 
   /* === BORDERS === */
-  --border-subtle:  #1a1a1a;
-  --border-default: #2a2a2a;
-  --border-active:  #555555;
+  --border-subtle:  #222222;
+  --border-default: #383838;
+  --border-active:  #686868;
 
   /* === ACCENT STATES === */
   --accent-dim:    #666666;
   --accent-bright: #e8e8e8;
   --accent-red:    #884444;
   --accent-red-bg: #3a1a1a;
+
+  /* === COLORS === */
+  --color-green:  #7ecb7e;
+  --color-red:    #e07070;
+  --color-yellow: #d4c97a;
 
   /* === TYPOGRAPHY === */
   --font-mono: 'JetBrains Mono', 'Courier New', monospace;
@@ -39,13 +47,35 @@
   --sp-4: 16px;
   --sp-6: 24px;
   --sp-8: 32px;
+  --sp-12: 48px;
 
   /* === LAYOUT === */
   --sidebar-w:   200px;
   --statusbar-h: 28px;
-  --content-max: 900px;
+  --content-max: 1720px;
 
   /* === TRANSITIONS === */
   --transition-fast:   80ms ease;
   --transition-normal: 150ms ease;
+}
+
+/* THEME: terminal-dim (daytime) */
+[data-theme="terminal-dim"] {
+  --bg-base:        #1a1a1a;
+  --bg-panel:       #202020;
+  --bg-control:     #2a2a2a;
+  --bg-hover:       #333333;
+  --bg-surface:     #242424;
+  --bg-elevated:    #2e2e2e;
+  --text-primary:   #eeeeee;
+  --text-secondary: #c0c0c0;
+  --text-muted:     #909090;
+  --text-label:     #d0d0d0;
+  --text-accent:    #e8e8e8;
+  --border-subtle:  #2e2e2e;
+  --border-default: #444444;
+  --border-active:  #787878;
+  --color-green:    #7ecb7e;
+  --color-red:      #e07070;
+  --color-yellow:   #d4c97a;
 }

@@ -10,6 +10,7 @@ interface HabitRowProps {
   completedDatesSet: Set<string>
   completedDates: string[]
   today: string
+  isSelected?: boolean
 }
 
 /**
@@ -18,7 +19,7 @@ interface HabitRowProps {
  * Visual structure:
  *   [symbol]  [name.................]  [◌ ● ● ◌ ● ● ●]  [streak]  [⋯]
  */
-export function HabitRow({ habit, completedDatesSet, completedDates, today }: HabitRowProps) {
+export function HabitRow({ habit, completedDatesSet, completedDates, today, isSelected }: HabitRowProps) {
   const [menuOpen, setMenuOpen] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
   const { openEditModal, openConfirmDeleteModal } = useUIStore()
@@ -49,7 +50,7 @@ export function HabitRow({ habit, completedDatesSet, completedDates, today }: Ha
 
   return (
     <div
-      className={`habit-row habit-row--${habit.accentChar}`}
+      className={`habit-row habit-row--${habit.accentChar} ${isSelected ? 'habit-row--selected' : ''}`}
       role="listitem"
     >
       {/* Symbol */}

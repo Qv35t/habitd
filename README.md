@@ -7,7 +7,7 @@ terminal-style habit tracker. local-first. no accounts. no cloud.
 ## quick start
 
 ```bash
-git clone https://github.com/YOUR/habitd
+git clone https://github.com/Qv35t/habitd
 cd habitd
 pnpm install
 pnpm dev
@@ -16,6 +16,19 @@ pnpm dev
 open http://localhost:5173
 
 requires: Node.js 20+ · pnpm 10+
+
+---
+
+### one-click launchers
+
+| File | OS | Run |
+| :-- | :-- | :-- |
+| `start.bat` | Windows | Double-click |
+| `start.sh` | Linux / macOS | `./start.sh` |
+| `start.mjs` | Any | `node start.mjs` |
+
+**Linux/macOS:** `chmod +x start.sh && ./start.sh`
+**Windows:** double-click `start.bat`
 
 ---
 
@@ -78,6 +91,20 @@ pnpm preview    # serves dist/ locally at http://localhost:4173
 ```
 
 output is a static `dist/` folder — serve with any static host or `npx serve dist`.
+
+---
+
+## production
+
+```bash
+pnpm build && npx serve dist
+```
+
+**Linux:** `chmod +x start.sh && ./start.sh`
+**Windows:** double-click `start.bat`
+**macOS:** `chmod +x start.sh && ./start.sh`
+
+All data stored locally in IndexedDB. No server, no cloud.
 
 ---
 

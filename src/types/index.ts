@@ -58,7 +58,7 @@ export interface StatsData {
   overallCompletionRate: number
 }
 
-export type ViewName = 'habits' | 'calendar' | 'stats' | 'settings'
+export type ViewName = 'home' | 'habits' | 'calendar' | 'stats' | 'settings'
 
 export type AccentChar = 'dim' | 'bright'
 

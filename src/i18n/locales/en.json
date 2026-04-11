@@ -1,0 +1,49 @@
+{
+  "nav": {
+    "home": "home", "habits": "habits", "calendar": "calendar",
+    "stats": "stats", "settings": "settings"
+  },
+  "home": {
+    "title": "HABITD",
+    "subtitle": "local-first habit tracker",
+    "sections": {
+      "habits":   { "key": "[h]", "label": "habits",   "desc": "manage your daily habits" },
+      "calendar": { "key": "[c]", "label": "calendar", "desc": "monthly overview with completion bars" },
+      "stats":    { "key": "[s]", "label": "stats",    "desc": "52-week heatmap and streaks" },
+      "settings": { "key": "[,]", "label": "settings", "desc": "export, import, reset, theme, language" }
+    },
+    "tip": "press [?] for hotkeys"
+  },
+  "habits": {
+    "empty": "no habits yet. press [n] to add one.",
+    "add": "add habit", "edit": "edit",
+    "delete": "delete", "archive": "archive", "today": "today"
+  },
+  "help": {
+    "title": "keyboard shortcuts",
+    "navigation": "navigation",
+    "actions": "actions",
+    "keys": {
+      "wasd_arrows": "arrows / w s — move between habits",
+      "space":       "space — toggle today",
+      "n":           "[n] — new habit",
+      "e":           "[e] — edit selected",
+      "d":           "[d] — delete selected",
+      "question":    "[?] — toggle this panel",
+      "esc":         "[esc] — close modal",
+      "h":           "[h] — habits view",
+      "c":           "[c] — calendar view",
+      "s_view":      "[s] — stats view",
+      "comma":       "[,] — settings"
+    }
+  },
+  "settings": {
+    "title": "settings", "theme": "theme", "language": "language",
+    "export": "export", "import": "import", "reset": "reset data",
+    "themes": { "terminal-dark": "terminal dark", "terminal-dim": "terminal dim" },
+    "languages": { "en": "english", "ru": "русский" }
+  },
+  "common": {
+    "confirm": "confirm", "cancel": "cancel", "save": "save", "close": "close"
+  }
+}

@@ -38,7 +38,7 @@ export function HabitDots({ habitId, completedDatesSet, today }: HabitDotsProps)
             key={date}
             className={[
               'habit-dot',
-              isCompleted ? 'habit-dot--filled' : 'habit-dot--empty',
+              isCompleted ? 'toggle-symbol toggle-symbol--on' : 'toggle-symbol toggle-symbol--off',
               isToday ? 'habit-dot--today' : '',
             ]
               .filter(Boolean)

@@ -10,9 +10,13 @@
  */
 import { create } from 'zustand'
 import { todayYearMonth } from '@/utils/calendar'
+import i18n from '@/i18n'
 import type { Habit, StatsPeriod, HabitFilter, SettingsSection, ConfirmModalState, ImportResult } from '@/types'
 
-type ActiveView = 'habits' | 'calendar' | 'stats' | 'settings'
+type Theme = 'terminal-dark' | 'terminal-dim'
+type Lang = 'en' | 'ru'
+
+type ActiveView = 'home' | 'habits' | 'calendar' | 'stats' | 'settings'
 
 type ModalState =
   | { type: 'closed' }
@@ -57,10 +61,21 @@ interface UIStore {
   openConfirmModal: (state: ConfirmModalState) => void
   closeConfirmModal: () => void
   setImportResult: (r: ImportResult) => void
+
+  // Phase 8: Keyboard nav, help, theme, language
+  selectedHabitIndex: number
+  helpOpen: boolean
+  theme: Theme
+  lang: Lang
+  setSelectedHabitIndex: (i: number) => void
+  setHelpOpen: (v: boolean) => void
+  setTheme: (t: Theme) => void
+  setLang: (l: Lang) => void
 }
 
+export type { Theme, Lang }
 export const useUIStore = create<UIStore>((set) => ({
-  activeView: 'habits',
+  activeView: 'home',
   setActiveView: (view) => set({ activeView: view }),
 
   selectedDate: null,
@@ -92,4 +107,22 @@ export const useUIStore = create<UIStore>((set) => ({
   openConfirmModal: (state) => set({ confirmModal: state }),
   closeConfirmModal: () => set({ confirmModal: null }),
   setImportResult: (r) => set({ importResult: r }),
+
+  // Phase 8
+  selectedHabitIndex: 0,
+  helpOpen: false,
+  theme: (localStorage.getItem('habitd-theme') as Theme) ?? 'terminal-dark',
+  lang: (localStorage.getItem('habitd-lang') as Lang) ?? 'en',
+  setSelectedHabitIndex: (i) => set({ selectedHabitIndex: i }),
+  setHelpOpen: (v) => set({ helpOpen: v }),
+  setTheme: (t) => {
+    set({ theme: t })
+    localStorage.setItem('habitd-theme', t)
+    document.documentElement.setAttribute('data-theme', t)
+  },
+  setLang: (l) => {
+    set({ lang: l })
+    localStorage.setItem('habitd-lang', l)
+    i18n.changeLanguage(l)
+  },
 }))

@@ -1239,3 +1239,213 @@
   justify-content: flex-end;
   margin-top: var(--sp-3);
 }
+
+/* ── Phase 8: Toggle Animation ────────────────── */
+
+@keyframes toggle-pop {
+  0%   { transform: scale(1.0); }
+  50%  { transform: scale(1.4); }
+  100% { transform: scale(1.15); }
+}
+
+.toggle-symbol {
+  display: inline-block;
+  width: 1ch;
+  transition: color 150ms ease;
+  will-change: color, transform;
+}
+
+.toggle-symbol--off {
+  color: var(--text-muted);
+}
+
+.toggle-symbol--on {
+  color: var(--color-green, #7ecb7e);
+  animation: toggle-pop 150ms ease forwards;
+}
+
+/* ── Phase 8: Keyboard Selection ──────────────── */
+
+.habit-row--selected {
+  background: var(--bg-surface, var(--bg-hover));
+  outline: 1px solid var(--border-active);
+}
+
+/* ── Phase 8: Heatmap Grid Fix ────────────────── */
+
+.heatmap-grid {
+  display: grid;
+  grid-template-columns: repeat(52, auto);
+  grid-auto-flow: column;
+  gap: 2px;
+}
+
+/* ── Phase 8: HomeView ────────────────────────── */
+
+.home-view {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  height: 100%;
+  padding: var(--sp-8) var(--sp-12);
+  gap: var(--sp-6);
+}
+
+.home-title {
+  font-size: 2rem;
+  font-family: var(--font-mono);
+  color: var(--text-primary);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.home-subtitle {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  margin-top: calc(-1 * var(--sp-4));
+}
+
+.home-nav {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  border-left: 1px solid var(--border-default);
+  padding-left: var(--sp-4);
+}
+
+.home-nav-item {
+  display: grid;
+  grid-template-columns: 4ch 16ch 1fr;
+  gap: var(--sp-4);
+  align-items: baseline;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: var(--sp-1) var(--sp-2);
+  text-align: left;
+  transition: background 100ms ease;
+  font-family: var(--font-mono);
+}
+
+.home-nav-item:hover { background: var(--bg-surface, var(--bg-hover)); }
+.home-nav-key   { color: var(--color-green, #7ecb7e); font-size: 0.875rem; }
+.home-nav-label { color: var(--text-primary); font-size: 0.875rem; }
+.home-nav-desc  { color: var(--text-muted); font-size: 0.75rem; }
+
+.home-footer { margin-top: var(--sp-4); }
+.home-tip    { font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-muted); }
+
+/* ── Phase 8: Help Panel ──────────────────────── */
+
+.help-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+  padding: var(--sp-4);
+  z-index: 100;
+}
+
+.help-panel {
+  background: var(--bg-elevated, var(--bg-panel));
+  border: 1px solid var(--border-default);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  min-width: 340px;
+  padding: var(--sp-4);
+}
+
+.help-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: var(--sp-3);
+  border-bottom: 1px solid var(--border-subtle);
+  padding-bottom: var(--sp-2);
+}
+
+.help-title  { color: var(--text-primary); }
+.help-close  {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  padding: 0;
+}
+
+.help-section-label {
+  color: var(--text-muted);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin: var(--sp-3) 0 var(--sp-1);
+}
+
+.help-row {
+  padding: 2px 0;
+  color: var(--text-secondary);
+}
+
+/* ── Phase 8: Settings Toggle Buttons ─────────── */
+
+.settings-toggle-group {
+  display: flex;
+  gap: var(--sp-2);
+  margin-top: var(--sp-2);
+}
+
+.settings-toggle-btn {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  padding: var(--sp-1) var(--sp-3);
+  background: var(--bg-surface, var(--bg-panel));
+  border: 1px solid var(--border-default);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 100ms ease;
+  border-radius: 0;
+}
+
+.settings-toggle-btn--active {
+  border-color: var(--border-active);
+  color: var(--text-primary);
+  background: var(--bg-elevated, var(--bg-panel));
+}
+
+.settings-toggle-btn:hover:not(.settings-toggle-btn--active) {
+  border-color: var(--border-default);
+  color: var(--text-label);
+}
+
+/* ── Phase 8: Statusbar Help Button ───────────── */
+
+.statusbar-help {
+  margin-left: auto;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+  padding: 0;
+}
+
+.statusbar-help:hover {
+  color: var(--text-secondary);
+}
+
+/* ── Phase 8: Sortable Habit Row ──────────────── */
+
+.sortable-habit-row {
+  cursor: grab;
+}
+
+.sortable-habit-row:active {
+  cursor: grabbing;
+}
