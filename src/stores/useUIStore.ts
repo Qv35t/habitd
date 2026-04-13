@@ -9,14 +9,23 @@
  * DOES NOT store: habits[], completions[] — those are Dexie via useLiveQuery.
  */
 import { create } from 'zustand'
+import { format } from 'date-fns'
 import { todayYearMonth } from '@/utils/calendar'
 import i18n from '@/i18n'
-import type { Habit, StatsPeriod, HabitFilter, SettingsSection, ConfirmModalState, ImportResult } from '@/types'
+import type {
+  Habit,
+  StatsPeriod,
+  HabitFilter,
+  SettingsSection,
+  ConfirmModalState,
+  ImportResult,
+  TaskFilter,
+} from '@/types'
 
 type Theme = 'terminal-dark' | 'terminal-dim'
 type Lang = 'en' | 'ru'
 
-type ActiveView = 'home' | 'habits' | 'calendar' | 'stats' | 'settings'
+type ActiveView = 'home' | 'habits' | 'calendar' | 'stats' | 'settings' | 'tasks'
 
 type ModalState =
   | { type: 'closed' }
@@ -71,6 +80,24 @@ interface UIStore {
   setHelpOpen: (v: boolean) => void
   setTheme: (t: Theme) => void
   setLang: (l: Lang) => void
+
+  // Phase 9: Tasks view state
+  tasksActiveDate: string
+  tasksFilter: TaskFilter
+  tasksWeeklyFilter: TaskFilter
+  setTasksActiveDate: (date: string) => void
+  setTasksFilter: (filter: TaskFilter) => void
+  setTasksWeeklyFilter: (filter: TaskFilter) => void
+
+  // Phase 10: WeekView state
+  weekOffset: number
+  setWeekOffset: (offset: number) => void
+  resetWeekToToday: () => void
+
+  // Phase 11: JournalView state
+  journalDate: string
+  setJournalDate: (date: string) => void
+  resetJournalToToday: () => void
 }
 
 export type { Theme, Lang }
@@ -125,4 +152,22 @@ export const useUIStore = create<UIStore>((set) => ({
     localStorage.setItem('habitd-lang', l)
     i18n.changeLanguage(l)
   },
+
+  // Phase 9: Tasks view state
+  tasksActiveDate: format(new Date(), 'yyyy-MM-dd'),
+  tasksFilter: 'all',
+  tasksWeeklyFilter: 'all',
+  setTasksActiveDate: (date) => set({ tasksActiveDate: date }),
+  setTasksFilter: (filter) => set({ tasksFilter: filter }),
+  setTasksWeeklyFilter: (filter) => set({ tasksWeeklyFilter: filter }),
+
+  // Phase 10
+  weekOffset: 0,
+  setWeekOffset: (offset) => set({ weekOffset: offset }),
+  resetWeekToToday: () => set({ weekOffset: 0 }),
+
+  // Phase 11
+  journalDate: format(new Date(), 'yyyy-MM-dd'),
+  setJournalDate: (date) => set({ journalDate: date }),
+  resetJournalToToday: () => set({ journalDate: format(new Date(), 'yyyy-MM-dd') }),
 }))

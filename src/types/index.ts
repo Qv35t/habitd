@@ -58,8 +58,6 @@ export interface StatsData {
   overallCompletionRate: number
 }
 
-export type ViewName = 'home' | 'habits' | 'calendar' | 'stats' | 'settings'
-
 export type AccentChar = 'dim' | 'bright'
 
 export const HABIT_SYMBOLS = ['●', '◆', '✦', '▪', '○', '◇', '⬡'] as const
@@ -185,4 +183,132 @@ export interface ConfirmModalState {
   keyword?: string
   isDangerous: boolean
   onConfirm: () => void | Promise<void>
+}
+
+// ── Task Types (Phase 9) ─────────────────────────────────────────
+
+export type TaskScope = 'daily' | 'weekly'
+
+export type TaskFilter = 'all' | 'active' | 'done'
+
+export interface Task {
+  id:        string       // nanoid()
+  text:      string       // task text, max 200 chars
+  scope:     TaskScope    // 'daily' | 'weekly'
+  date:      string       // 'YYYY-MM-DD' — for daily: the day, for weekly: Monday of week
+  weekKey:   string       // 'YYYY-WNN' — ISO week key
+  done:      0 | 1        // 0 = active, 1 = done (Dexie can't index boolean)
+  createdAt: string       // 'YYYY-MM-DD'
+  sortOrder: number       // order within the list
+}
+
+export interface TaskCounters {
+  done:    number   // completed tasks for the day
+  left:    number   // remaining tasks for the day
+  total:   number   // total tasks for the day
+  percent: number   // 0-100
+}
+
+export interface WeekRange {
+  from:    string   // 'YYYY-MM-DD' — Monday of week
+  to:      string   // 'YYYY-MM-DD' — Sunday of week
+  weekKey: string   // 'YYYY-WNN'
+  label:   string   // '28 янв – 3 фев 2026'
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  PHASE 10 — WeekView Types
+// ═══════════════════════════════════════════════════════════════════════════
+
+/** Extended ViewName with 'week' between 'calendar' and 'stats'. */
+export type ViewName =
+  | 'home'
+  | 'habits'
+  | 'calendar'
+  | 'week'
+  | 'journal'
+  | 'stats'
+  | 'tasks'
+  | 'settings'
+
+/** One column in the WeekGrid header (Mon–Sun). */
+export interface WeekDay {
+  date: string        // YYYY-MM-DD
+  dayLabel: string    // "Mon" | "Tue" | … | "Sun"
+  dayOfMonth: number  // 1–31
+  monthLabel: string  // "Jan" … "Dec"
+  isToday: boolean
+  isFuture: boolean
+}
+
+/** One cell in the WeekGrid body (habit × day intersection). */
+export interface WeekCellData {
+  date: string
+  habitId: string
+  isCompleted: boolean
+  isFuture: boolean
+  isToday: boolean
+}
+
+/** Return type of useWeekData hook — all data needed for WeekView. */
+export interface WeekViewData {
+  isLoading: boolean
+  weekDays: WeekDay[]                          // always 7, Mon–Sun
+  habits: Habit[]                              // active, sorted by sortOrder
+  completionMap: Record<string, Set<string>>   // date → Set<habitId>
+  weekLabel: string                            // "Apr 14 – 20, 2026"
+  totalPossible: number                        // habits.length × non-future days
+  totalCompleted: number
+  completionRate: number                       // 0–100, 1 decimal
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  PHASE 11 — JournalView Types
+// ═══════════════════════════════════════════════════════════════════════════
+
+/** Mood level 1–5. 0 = not set. */
+export type MoodLevel = 0 | 1 | 2 | 3 | 4 | 5;
+
+/** ASCII representations for mood levels. Index = level (0 = unset). */
+export const MOOD_CHARS: Record<MoodLevel, string> = {
+  0: '·',
+  1: '▁',
+  2: '▃',
+  3: '▅',
+  4: '▇',
+  5: '█',
+};
+
+/** A single day's journal entry stored in Dexie `notes` table. */
+export interface JournalEntry {
+  id: string        // nanoid()
+  date: string      // YYYY-MM-DD (unique per day — upsert logic)
+  content: string   // plain text, no markdown rendering
+  mood: MoodLevel   // 0 = unset
+  createdAt: string // ISO 8601 full datetime
+  updatedAt: string // ISO 8601 full datetime — updated on every save
+}
+
+/** Auto-save lifecycle state for JournalEditor. */
+export type SaveState = 'idle' | 'dirty' | 'saving' | 'saved' | 'error';
+
+/** Habit row displayed in JournalHabitsBar (read-only). */
+export interface JournalHabitItem {
+  id: string
+  name: string
+  symbol: string
+  isCompleted: boolean
+}
+
+/** Return type of useJournalEntry hook. */
+export interface JournalViewData {
+  isLoading: boolean
+  entry: JournalEntry | null           // null = no entry for this date yet
+  habits: JournalHabitItem[]           // active habits + today's completion state
+  completedCount: number
+  totalCount: number
+  completionRate: number               // 0–100, 1 decimal
+  dateLabel: string                    // "Mon, 13 Apr 2026"
+  isToday: boolean
+  isFuture: boolean
 }

@@ -5,7 +5,10 @@ import type { ViewName } from '@/types'
 const NAV_ITEMS: { view: ViewName; i18nKey: string }[] = [
   { view: 'habits',   i18nKey: 'nav.habits' },
   { view: 'calendar', i18nKey: 'nav.calendar' },
+  { view: 'week',     i18nKey: 'nav.week' },
+  { view: 'journal',  i18nKey: 'nav.journal' },
   { view: 'stats',    i18nKey: 'nav.stats' },
+  { view: 'tasks',    i18nKey: 'nav.tasks' },
   { view: 'settings', i18nKey: 'nav.settings' },
 ]
 

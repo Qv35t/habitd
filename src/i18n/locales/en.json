@@ -3,7 +3,10 @@
     "home": "home",
     "habits": "habits",
     "calendar": "calendar",
+    "week": "week",
+    "journal": "journal",
     "stats": "stats",
+    "tasks": "tasks",
     "settings": "settings"
   },
   "home": {
@@ -13,6 +16,7 @@
       "habits":   { "key": "h", "label": "habits",   "desc": "manage your daily habits" },
       "calendar": { "key": "c", "label": "calendar", "desc": "monthly overview with completion bars" },
       "stats":    { "key": "s", "label": "stats",    "desc": "52-week heatmap and streaks" },
+      "tasks":    { "key": "t", "label": "tasks",    "desc": "daily checklist and weekly task list" },
       "settings": { "key": ",", "label": "settings", "desc": "export, import, reset, theme, language" }
     },
     "tip": "press ? for hotkeys"

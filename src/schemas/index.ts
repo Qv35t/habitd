@@ -90,3 +90,45 @@ export const BackupDataSchema = z.object({
   habits:      z.array(BackupHabitSchema),
   completions: z.array(BackupCompletionSchema),
 })
+
+// ── Task Schemas (Phase 9) ──────────────────────────────────────
+
+export const TaskCreateSchema = z.object({
+  text: z
+    .string()
+    .min(1, 'Task text is required')
+    .max(200, 'Task text too long (max 200 chars)')
+    .trim(),
+  scope: z.enum(['daily', 'weekly'], {
+    errorMap: () => ({ message: 'scope must be "daily" or "weekly"' }),
+  }),
+  date: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/, 'Date must be in YYYY-MM-DD format'),
+})
+
+export const TaskUpdateSchema = z.object({
+  text: z.string().min(1).max(200).trim().optional(),
+  done: z.union([z.literal(0), z.literal(1)]).optional(),
+})
+
+export type TaskCreateInput = z.infer<typeof TaskCreateSchema>
+export type TaskUpdateInput  = z.infer<typeof TaskUpdateSchema>
+
+export function validateTaskCreate(input: unknown): TaskCreateInput {
+  const result = TaskCreateSchema.safeParse(input)
+  if (!result.success) {
+    const messages = result.error.issues.map((e) => e.message).join(', ')
+    throw new Error(`Task validation failed: ${messages}`)
+  }
+  return result.data
+}
+
+export function validateTaskUpdate(input: unknown): TaskUpdateInput {
+  const result = TaskUpdateSchema.safeParse(input)
+  if (!result.success) {
+    const messages = result.error.issues.map((e) => e.message).join(', ')
+    throw new Error(`Task update validation failed: ${messages}`)
+  }
+  return result.data
+}
