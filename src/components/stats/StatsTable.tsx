@@ -75,7 +75,7 @@ export function StatsTable({ rows }: StatsTableProps) {
   }
 
   return (
-    <div className="stats-table" role="table" aria-label={t('stats.habits')}>
+    <div className="stats-table" role="table" aria-label={t('stats.habits')} style={{ width: '100%', overflowX: 'auto' }}>
       {/* Header */}
       <div className="stats-table__header" role="row">
         <button className="stats-table__col stats-table__col--symbol" role="columnheader">

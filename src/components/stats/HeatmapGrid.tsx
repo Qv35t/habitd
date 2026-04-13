@@ -24,6 +24,7 @@ export function HeatmapGrid({ weeks, today }: HeatmapGridProps) {
   const locale = i18n.language === 'ru' ? ruLocale : undefined
 
   // Build month labels — show label when month changes from previous week
+  // Skip December labels that belong to the previous year (padding weeks before Jan 1)
   const monthLabels: { weekIndex: number; label: string }[] = []
   let prevMonth = ''
 
@@ -31,6 +32,12 @@ export function HeatmapGrid({ weeks, today }: HeatmapGridProps) {
     if (week.cells.length === 0) continue
     const firstCellDate = parseISO(week.cells[0].date)
     const month = format(firstCellDate, 'MMM', { locale })
+    // Skip December from previous year (padding weeks)
+    const isFirstWeekDec = week.weekIndex === 0 && month.toLowerCase() === 'dec'
+    if (isFirstWeekDec) {
+      prevMonth = 'dec' // mark dec as seen so jan will be picked up
+      continue
+    }
     if (month !== prevMonth) {
       monthLabels.push({ weekIndex: week.weekIndex, label: month })
       prevMonth = month
@@ -48,7 +55,7 @@ export function HeatmapGrid({ weeks, today }: HeatmapGridProps) {
         <div className="heatmap-months__spacer" />
         <div
           className="heatmap-months__labels"
-          style={{ gridTemplateColumns: `repeat(${weeks.length}, auto)` }}
+          style={{ gridTemplateColumns: `repeat(${weeks.length}, 1fr)` }}
         >
           {monthLabels.map(({ weekIndex, label }) => (
             <span
@@ -76,7 +83,7 @@ export function HeatmapGrid({ weeks, today }: HeatmapGridProps) {
         {/* 52-week grid */}
         <div
           className="heatmap-grid"
-          style={{ gridTemplateColumns: `repeat(${weeks.length}, auto)` }}
+          style={{ gridTemplateColumns: `repeat(${weeks.length}, 1fr)` }}
           role="img"
           aria-label="Calendar year activity heatmap"
         >

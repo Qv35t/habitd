@@ -164,8 +164,8 @@ describe('exportToJSON', () => {
   it('triggers download with correct filename pattern', async () => {
     const { exportToJSON } = await import('@/utils/export')
     const { db } = await import('@/db')
-    vi.mocked(db.habits.toArray).mockResolvedValue([])
-    vi.mocked(db.completions.toArray).mockResolvedValue([])
+    ;(db.habits.toArray as ReturnType<typeof vi.fn>).mockResolvedValue([])
+    ;(db.completions.toArray as ReturnType<typeof vi.fn>).mockResolvedValue([])
 
     await exportToJSON()
 
@@ -175,10 +175,10 @@ describe('exportToJSON', () => {
   it('output JSON is valid BackupData structure', async () => {
     const { exportToJSON } = await import('@/utils/export')
     const { db } = await import('@/db')
-    vi.mocked(db.habits.toArray).mockResolvedValue([
+    ;(db.habits.toArray as ReturnType<typeof vi.fn>).mockResolvedValue([
       { id: 'h1', name: 'Run', symbol: '●', accentChar: 'bright', createdAt: '2026-01-01', archivedAt: '', sortOrder: 0 },
     ])
-    vi.mocked(db.completions.toArray).mockResolvedValue([
+    ;(db.completions.toArray as ReturnType<typeof vi.fn>).mockResolvedValue([
       { id: 'c1', habitId: 'h1', date: '2026-04-10' },
     ])
 
