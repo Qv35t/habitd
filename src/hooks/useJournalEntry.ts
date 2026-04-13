@@ -41,7 +41,9 @@ export function useJournalEntry(date: string): JournalViewData & {
   )
 
   const data = useMemo<JournalViewData>(() => {
-    if (habits === undefined || completions === undefined || entry === undefined) {
+    // Only habits and completions being undefined means "still loading from Dexie"
+    // entry can be undefined (no record yet) — valid non-loading state
+    if (habits === undefined || completions === undefined) {
       return {
         isLoading: true,
         entry: null,
@@ -55,6 +57,7 @@ export function useJournalEntry(date: string): JournalViewData & {
       }
     }
 
+    const resolvedEntry = entry !== undefined ? entry : null
     const completedIds = new Set(completions.map(c => c.habitId))
     const habitItems = habits.map(h => ({
       id: h.id,
@@ -70,7 +73,7 @@ export function useJournalEntry(date: string): JournalViewData & {
 
     return {
       isLoading: false,
-      entry: entry ?? null,
+      entry: resolvedEntry,
       habits: habitItems,
       completedCount,
       totalCount,
@@ -83,21 +86,33 @@ export function useJournalEntry(date: string): JournalViewData & {
 
   /** Upserts the journal entry content for the current date. */
   const saveContent = useCallback(async (content: string) => {
-    const existing = await db.notes.where('date').equals(date).first()
-    if (existing) {
-      await db.notes.update(existing.id, { content, updatedAt: new Date().toISOString() })
-    } else {
-      await db.notes.add({ id: nanoid(), ...createJournalEntry(date, content, 0) })
+    try {
+      const existing = await db.notes.where('date').equals(date).first()
+      if (existing) {
+        await db.notes.update(existing.id, { content, updatedAt: new Date().toISOString() })
+      } else {
+        await db.notes.add({ id: nanoid(), ...createJournalEntry(date, content, 0) })
+      }
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error('[useJournalEntry] saveContent failed:', err)
+      throw err
     }
   }, [date])
 
   /** Upserts the journal entry mood for the current date. */
   const saveMood = useCallback(async (mood: MoodLevel) => {
-    const existing = await db.notes.where('date').equals(date).first()
-    if (existing) {
-      await db.notes.update(existing.id, { mood, updatedAt: new Date().toISOString() })
-    } else {
-      await db.notes.add({ id: nanoid(), ...createJournalEntry(date, '', mood) })
+    try {
+      const existing = await db.notes.where('date').equals(date).first()
+      if (existing) {
+        await db.notes.update(existing.id, { mood, updatedAt: new Date().toISOString() })
+      } else {
+        await db.notes.add({ id: nanoid(), ...createJournalEntry(date, '', mood) })
+      }
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error('[useJournalEntry] saveMood failed:', err)
+      throw err
     }
   }, [date])
 

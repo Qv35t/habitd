@@ -8,10 +8,10 @@ import { WeeklyTaskList } from '@/components/tasks/WeeklyTaskList'
  * TasksView — daily + weekly task manager.
  *
  * Layout:
- *   [DateNav]          ← ← 28 января 2026 → →   [сегодня]
- *   [TaskCounters]     ГОТОВО: 3 · ОСТАЛОСЬ: 2 · ИТОГО: 5  ██████░░░░ 60%
- *   [DailyTaskList]    – задачи на сегодня  [все] [активные] [выполненные]
- *   [WeeklyTaskList]   – задачи на неделю (28 янв – 3 фев 2026)
+ *   [DateNav]          ← jan 28, 2026 →   [today]
+ *   [TaskCounters]     DONE: 3 · LEFT: 2 · TOTAL: 5  ██████░░░░ 60%
+ *   [DailyTaskList]    – daily tasks  [all] [active] [done]
+ *   [WeeklyTaskList]   – weekly tasks
  */
 export function TasksView() {
   const tasksActiveDate = useUIStore((s) => s.tasksActiveDate)

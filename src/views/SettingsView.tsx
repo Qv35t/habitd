@@ -4,11 +4,10 @@ import { DataSection } from '@/components/settings/DataSection'
 import { HabitsSection } from '@/components/settings/HabitsSection'
 import { DangerSection } from '@/components/settings/DangerSection'
 import { ConfirmModal } from '@/components/settings/ConfirmModal'
-import type { Theme, Lang } from '@/stores/useUIStore'
+import type { Theme } from '@/stores/useUIStore'
 
 /**
  * SettingsView — settings and data management screen.
- * Includes theme and language toggles.
  */
 export function SettingsView() {
   const { t } = useTranslation()
@@ -17,18 +16,11 @@ export function SettingsView() {
     closeConfirmModal,
     theme,
     setTheme,
-    lang,
-    setLang,
   } = useUIStore()
 
   const themes: { value: Theme; label: string }[] = [
     { value: 'terminal-dark', label: t('settings.themes.terminal-dark') },
     { value: 'terminal-dim', label: t('settings.themes.terminal-dim') },
-  ]
-
-  const langs: { value: Lang; label: string }[] = [
-    { value: 'en', label: t('settings.languages.en') },
-    { value: 'ru', label: t('settings.languages.ru') },
   ]
 
   return (
@@ -46,22 +38,6 @@ export function SettingsView() {
               key={value}
               className={`settings-toggle-btn ${theme === value ? 'settings-toggle-btn--active' : ''}`}
               onClick={() => setTheme(value)}
-            >
-              {label}
-            </button>
-          ))}
-        </div>
-      </section>
-
-      {/* Language */}
-      <section className="settings-section">
-        <div className="settings-section-label">{t('settings.language')}</div>
-        <div className="settings-toggle-group">
-          {langs.map(({ value, label }) => (
-            <button
-              key={value}
-              className={`settings-toggle-btn ${lang === value ? 'settings-toggle-btn--active' : ''}`}
-              onClick={() => setLang(value)}
             >
               {label}
             </button>

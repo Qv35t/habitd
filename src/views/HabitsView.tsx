@@ -78,6 +78,20 @@ export function HabitsView() {
         void toggleCompletion(habits[selectedHabitIndex].id, today)
       }
     },
+    n: () => {
+      openAddModal()
+    },
+    e: () => {
+      if (habits && habits[selectedHabitIndex]) {
+        useUIStore.getState().openEditModal(habits[selectedHabitIndex])
+      }
+    },
+    d: () => {
+      if (habits && habits[selectedHabitIndex]) {
+        const h = habits[selectedHabitIndex]
+        useUIStore.getState().openConfirmDeleteModal(h.id, h.name)
+      }
+    },
   }, [selectedHabitIndex, habits])
 
   const handleConfirmDelete = async (habitId: string) => {

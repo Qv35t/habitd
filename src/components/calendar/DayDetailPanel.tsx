@@ -1,5 +1,4 @@
 import { format, parseISO, isValid } from 'date-fns'
-import { ru as ruLocale } from 'date-fns/locale'
 import { useActiveHabits } from '@/hooks/useHabits'
 import { useCompletionsForDate, toggleCompletion } from '@/hooks/useCompletions'
 import { Button } from '@/components/ui/Button'
@@ -15,8 +14,7 @@ interface DayDetailPanelProps {
  * for the selected calendar date.
  */
 export function DayDetailPanel({ date, onClose }: DayDetailPanelProps) {
-  const { t, i18n } = useTranslation()
-  const locale = i18n.language === 'ru' ? ruLocale : undefined
+  const { t } = useTranslation()
 
   const habits = useActiveHabits()
   const completions = useCompletionsForDate(date)
@@ -25,7 +23,7 @@ export function DayDetailPanel({ date, onClose }: DayDetailPanelProps) {
 
   const parsedDate = parseISO(date)
   const formattedDate = isValid(parsedDate)
-    ? format(parsedDate, 'EEE dd MMM yyyy', { locale })
+    ? format(parsedDate, 'EEE dd MMM yyyy')
     : date
 
   const today = format(new Date(), 'yyyy-MM-dd')

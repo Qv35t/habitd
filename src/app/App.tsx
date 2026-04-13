@@ -32,20 +32,23 @@ function ViewRouter() {
 export function App() {
   const { theme, setActiveView } = useUIStore()
 
-  // Apply theme on mount
+  // Apply theme on mount and clear stale language setting
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme)
+    localStorage.removeItem('habitd-lang')
   }, [theme])
 
   // Global view-switching hotkeys
   useHotkeys({
     h: () => setActiveView('habits'),
     c: () => setActiveView('calendar'),
-    w: () => setActiveView('week'),
-    j: () => setActiveView('journal'),
     s: () => setActiveView('stats'),
-    t: () => setActiveView('tasks'),
     ',': () => setActiveView('settings'),
+    // Phase 12: new views
+    t: () => setActiveView('tasks'),
+    v: () => setActiveView('week'),
+    j: () => setActiveView('journal'),
+    g: () => setActiveView('home'),
   }, [])
 
   return (

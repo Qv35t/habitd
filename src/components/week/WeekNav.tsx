@@ -14,12 +14,12 @@ export function WeekNav({ weekLabel, weekOffset, onPrev, onNext, onToday }: Week
     <div className="week-nav">
       <span className="week-nav__label">week</span>
       <div className="week-nav__center">
-        <Button variant="border" onClick={onPrev}>←</Button>
+        <Button variant="ghost" onClick={onPrev}>←</Button>
         <span className="week-nav__week-label">{weekLabel}</span>
-        <Button variant="border" onClick={onNext}>→</Button>
+        <Button variant="ghost" onClick={onNext}>→</Button>
       </div>
       <Button
-        variant="border"
+        variant="ghost"
         onClick={onToday}
         disabled={weekOffset === 0}
         className={weekOffset !== 0 ? 'week-nav__today--active' : ''}

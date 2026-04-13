@@ -13,11 +13,13 @@
     "title": "HABITD",
     "subtitle": "local-first habit tracker",
     "sections": {
-      "habits":   { "key": "h", "label": "habits",   "desc": "manage your daily habits" },
-      "calendar": { "key": "c", "label": "calendar", "desc": "monthly overview with completion bars" },
-      "stats":    { "key": "s", "label": "stats",    "desc": "52-week heatmap and streaks" },
-      "tasks":    { "key": "t", "label": "tasks",    "desc": "daily checklist and weekly task list" },
-      "settings": { "key": ",", "label": "settings", "desc": "export, import, reset, theme, language" }
+      "habits":   { "key": "[h]", "label": "habits",   "desc": "manage your daily habits" },
+      "calendar": { "key": "[c]", "label": "calendar", "desc": "monthly overview with completion bars" },
+      "stats":    { "key": "[s]", "label": "stats",    "desc": "52-week heatmap and streaks" },
+      "tasks":    { "key": "[t]", "label": "tasks",    "desc": "daily & weekly task management" },
+      "week":     { "key": "[v]", "label": "week",     "desc": "7-day mon–sun completion grid" },
+      "journal":  { "key": "[j]", "label": "journal",  "desc": "daily notes, mood, habit summary" },
+      "settings": { "key": "[,]", "label": "settings", "desc": "export, import, reset, theme" }
     },
     "tip": "press ? for hotkeys"
   },
@@ -29,10 +31,25 @@
     "archive": "archive",
     "today":   "today"
   },
+  "tasks": {
+    "title":              "tasks",
+    "today":              "today",
+    "done":               "done",
+    "left":               "left",
+    "total":              "total",
+    "dailyTitle":         "– daily tasks",
+    "noDaily":            "no tasks for today",
+    "noFilter":           "no tasks match filter",
+    "noWeekly":           "no tasks for this week",
+    "addDailyPlaceholder": "+ add task...",
+    "addWeeklyPlaceholder": "+ add weekly task..."
+  },
   "help": {
-    "title":      "keyboard shortcuts",
-    "navigation": "navigation",
-    "actions":    "actions",
+    "title":         "keyboard shortcuts",
+    "navigation":    "navigation",
+    "actions":       "actions",
+    "guide_title":   "user guide",
+    "sections_label": "sections",
     "keys": {
       "wasdarrows": "w / s / arrows — move between habits",
       "space":      "space — toggle today",
@@ -44,7 +61,21 @@
       "h":          "h — habits view",
       "c":          "c — calendar view",
       "sview":      "s — stats view",
-      "comma":      ", — settings"
+      "comma":      ", — settings",
+      "t":          "[t] — tasks view",
+      "v":          "[v] — week view",
+      "j":          "[j] — journal view",
+      "g":          "[g] — go home"
+    },
+    "guide": {
+      "home":     { "title": "home",     "desc": "dashboard with quick access to all sections. press the section key or click to navigate." },
+      "habits":   { "title": "habits",   "desc": "manage your daily habits. add with [n], edit with [e], delete with [d]. toggle today with [space]. drag to reorder." },
+      "calendar": { "title": "calendar", "desc": "monthly overview. each day shows completion bars per habit. click a day to toggle habits for that date." },
+      "stats":    { "title": "stats",    "desc": "52-week heatmap (· ░ ▒ ▓ █) and per-habit streaks. filter by habit or period." },
+      "tasks":    { "title": "tasks",    "desc": "daily and weekly task lists. tasks reset automatically (daily at midnight, weekly on monday). mark done with [space] or click." },
+      "week":     { "title": "week",     "desc": "7-day mon–sun grid. toggle habit completions inline. navigate weeks with [←] [→]. streaks shown as badges." },
+      "journal":  { "title": "journal",  "desc": "one note per day. pick a mood (1–5), write notes, see habit summary. auto-saves with 500ms debounce." },
+      "settings": { "title": "settings", "desc": "export data as json or markdown, import backup, reset all data, switch theme." }
     }
   },
   "calendar": {
@@ -102,12 +133,10 @@
   "settings": {
     "title":          "settings",
     "theme":          "theme",
-    "language":       "language",
     "export":         "export",
     "import":         "import",
     "reset":          "reset data",
     "themes":         { "terminal-dark": "terminal dark", "terminal-dim": "terminal dim" },
-    "languages":      { "en": "english", "ru": "русский" },
     "data":           "data",
     "exportJson":     "[export json]",
     "exportJsonDesc": "export all habits & logs to .json",
@@ -115,12 +144,12 @@
     "importJsonDesc": "restore from a habitd backup file",
     "exportMd":       "[export markdown]",
     "exportMdDesc":   "plain-text habit report",
-    "archiveSection": "привычки",
-    "noArchived":     "нет архивных привычек",
-    "dangerZone":     "опасная зона",
-    "resetBtn":       "[сбросить данные]",
-    "resetDesc":      "навсегда удалить все привычки и записи",
-    "resetHint":      "введите \"reset\" в диалоге подтверждения для продолжения"
+    "archiveSection": "habits",
+    "noArchived":     "no archived habits",
+    "dangerZone":     "danger zone",
+    "resetBtn":       "[reset data]",
+    "resetDesc":      "permanently delete all habits and records",
+    "resetHint":      "type \"reset\" in the confirmation dialog to proceed"
   },
   "common": {
     "confirm": "confirm",

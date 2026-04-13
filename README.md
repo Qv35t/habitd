@@ -114,9 +114,13 @@ settings → danger zone → [reset all data]
 
 | view | description |
 | :-- | :-- |
+| home | dashboard with quick access to all sections |
 | habits | main screen — toggle completions, add/edit/archive habits |
 | calendar | month grid — day-by-day completion overview |
 | stats | 52-week heatmap, streak records, per-habit completion rates |
+| tasks | daily + weekly task manager |
+| week | 7-day Mon→Sun completion grid |
+| journal | daily notes, mood, habits summary |
 | settings | export/import backup, manage archived habits, reset data |
 
 ---

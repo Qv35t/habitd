@@ -1321,6 +1321,27 @@
   padding-left: var(--sp-4);
 }
 
+/* Phase 12: HomeView grouped nav */
+.home-nav-groups {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+
+.home-nav-group-label {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  display: block;
+  margin-bottom: var(--sp-1);
+}
+
+.home-nav--core    .home-nav-key { color: var(--color-green, #7ecb7e); }
+.home-nav--extended .home-nav-key { color: var(--color-yellow, #e0c860); }
+.home-nav--utility  .home-nav-key { color: var(--text-muted); }
+
 .home-nav-item {
   display: grid;
   grid-template-columns: 4ch 16ch 1fr;
@@ -1361,7 +1382,10 @@
   border: 1px solid var(--border-default);
   font-family: var(--font-mono);
   font-size: 0.8rem;
-  min-width: 340px;
+  min-width: 420px;
+  max-width: 500px;
+  max-height: 80vh;
+  overflow-y: auto;
   padding: var(--sp-4);
 }
 
@@ -1395,6 +1419,46 @@
 .help-row {
   padding: 2px 0;
   color: var(--text-secondary);
+}
+
+/* Phase 12: HelpPanel guide section */
+.help-divider {
+  border: none;
+  border-top: 1px solid var(--border-subtle);
+  margin: var(--sp-3) 0;
+}
+
+.help-guide-section {
+  margin-top: var(--sp-2);
+}
+
+.help-guide-item {
+  display: flex;
+  flex-direction: column;
+  padding: var(--sp-1) 0;
+  border-bottom: 1px solid var(--border-subtle);
+  gap: 2px;
+}
+
+.help-guide-item:last-child {
+  border-bottom: none;
+}
+
+.help-guide-item-title {
+  color: var(--text-primary);
+  font-size: 0.8rem;
+}
+
+.help-guide-item-desc {
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  line-height: 1.5;
+}
+
+/* Phase 12: Sidebar separator */
+.sidebar-separator {
+  border-top: 1px solid var(--border-subtle);
+  margin: var(--sp-1) var(--sp-2);
 }
 
 /* ── Phase 8: Settings Toggle Buttons ─────────── */
@@ -1735,7 +1799,8 @@
 
 .week-grid {
   display: grid;
-  grid-template-columns: 22ch repeat(7, 1fr) 5ch;
+  grid-template-columns: 55ch repeat(7, 1fr) 12ch;
+  min-width: 1500px;
   font-family: var(--font-mono);
 }
 
@@ -1771,7 +1836,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: var(--sp-1);
+  padding: var(--sp-3);
   font-family: var(--font-mono);
   border-bottom: 1px solid var(--border-subtle);
 }
@@ -1792,12 +1857,12 @@
 }
 
 .week-day-header__label {
-  font-size: var(--font-size-xs);
+  font-size: var(--font-size-sm);
   color: var(--text-secondary);
 }
 
 .week-day-header__num {
-  font-size: var(--font-size-md);
+  font-size: var(--font-size-xl);
   color: var(--text-primary);
 }
 
@@ -1809,9 +1874,9 @@
 .week-habit-name {
   display: flex;
   align-items: center;
-  padding: var(--sp-1) var(--sp-2);
+  padding: var(--sp-3) var(--sp-4);
   font-family: var(--font-mono);
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-base);
   color: var(--text-secondary);
   border-bottom: 1px solid var(--border-subtle);
   white-space: nowrap;
@@ -1828,9 +1893,9 @@
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  padding: var(--sp-1) var(--sp-2);
+  padding: var(--sp-3) var(--sp-4);
   font-family: var(--font-mono);
-  font-size: var(--font-size-xs);
+  font-size: var(--font-size-sm);
   color: var(--text-muted);
   border-bottom: 1px solid var(--border-subtle);
 }
@@ -1841,12 +1906,12 @@
   align-items: center;
   justify-content: center;
   width: 100%;
-  min-height: 28px;
+  min-height: 70px;
   border: 1px solid var(--border-subtle);
   background: transparent;
   cursor: pointer;
   font-family: var(--font-mono);
-  font-size: var(--font-size-base);
+  font-size: var(--font-size-lg);
   color: var(--text-muted);
   border-radius: 0;
   transition: background var(--transition-fast), color var(--transition-fast);
@@ -1884,7 +1949,7 @@
   align-items: center;
   gap: var(--sp-3);
   border-top: 1px solid var(--border-subtle);
-  padding: var(--sp-3) var(--sp-4);
+  padding: var(--sp-5) var(--sp-6);
   font-family: var(--font-mono);
   font-size: var(--font-size-sm);
 }

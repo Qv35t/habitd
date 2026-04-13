@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { format, parseISO } from 'date-fns'
+import { format } from 'date-fns'
 import { calcCurrentStreak } from '../../engine/streakEngine'
 import { WeekDayHeader } from './WeekDayHeader'
 import { WeekHabitRow }  from './WeekHabitRow'

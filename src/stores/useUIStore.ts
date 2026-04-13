@@ -11,7 +11,6 @@
 import { create } from 'zustand'
 import { format } from 'date-fns'
 import { todayYearMonth } from '@/utils/calendar'
-import i18n from '@/i18n'
 import type {
   Habit,
   StatsPeriod,
@@ -23,9 +22,8 @@ import type {
 } from '@/types'
 
 type Theme = 'terminal-dark' | 'terminal-dim'
-type Lang = 'en' | 'ru'
 
-type ActiveView = 'home' | 'habits' | 'calendar' | 'stats' | 'settings' | 'tasks'
+type ActiveView = 'home' | 'habits' | 'calendar' | 'week' | 'journal' | 'stats' | 'tasks' | 'settings'
 
 type ModalState =
   | { type: 'closed' }
@@ -71,15 +69,13 @@ interface UIStore {
   closeConfirmModal: () => void
   setImportResult: (r: ImportResult) => void
 
-  // Phase 8: Keyboard nav, help, theme, language
+  // Phase 8: Keyboard nav, help, theme
   selectedHabitIndex: number
   helpOpen: boolean
   theme: Theme
-  lang: Lang
   setSelectedHabitIndex: (i: number) => void
   setHelpOpen: (v: boolean) => void
   setTheme: (t: Theme) => void
-  setLang: (l: Lang) => void
 
   // Phase 9: Tasks view state
   tasksActiveDate: string
@@ -100,7 +96,7 @@ interface UIStore {
   resetJournalToToday: () => void
 }
 
-export type { Theme, Lang }
+export type { Theme }
 export const useUIStore = create<UIStore>((set) => ({
   activeView: 'home',
   setActiveView: (view) => set({ activeView: view }),
@@ -139,18 +135,12 @@ export const useUIStore = create<UIStore>((set) => ({
   selectedHabitIndex: 0,
   helpOpen: false,
   theme: (localStorage.getItem('habitd-theme') as Theme) ?? 'terminal-dark',
-  lang: (localStorage.getItem('habitd-lang') as Lang) ?? 'en',
   setSelectedHabitIndex: (i) => set({ selectedHabitIndex: i }),
   setHelpOpen: (v) => set({ helpOpen: v }),
   setTheme: (t) => {
     set({ theme: t })
     localStorage.setItem('habitd-theme', t)
     document.documentElement.setAttribute('data-theme', t)
-  },
-  setLang: (l) => {
-    set({ lang: l })
-    localStorage.setItem('habitd-lang', l)
-    i18n.changeLanguage(l)
   },
 
   // Phase 9: Tasks view state

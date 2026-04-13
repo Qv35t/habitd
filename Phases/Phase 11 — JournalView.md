@@ -87,3 +87,4 @@ Daily reflection panel: free-form notes + mood indicator + habits summary с aut
 - Показывает habits summary из [[Phase 2 — Habits View]]
 - Навигация: между [[Phase 10 — WeekView]] и [[Phase 5 — Stats View]]
 - DB v3 расширяет схему после [[Phase 9 — TasksView]] (v2)
+- После Phase 11: [[Phase 12 — HomeView Update + EN-Only + Help Rework]]

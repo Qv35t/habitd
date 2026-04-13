@@ -76,3 +76,4 @@
 - Использует [[useUIStore]] из [[Phase 0 — Foundation]]
 - Навигация: между [[Phase 4 — Calendar View]] и [[Phase 5 — Stats View]]
 - Расширяет [[Phase 9 — TasksView]] (после него)
+- Следующая: [[Phase 11 — JournalView]]

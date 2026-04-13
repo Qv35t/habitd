@@ -18,6 +18,9 @@ export function JournalView() {
     return (
       <div className="journal-view journal-view--loading">
         <span>loading…</span>
+        <small className="journal-loading-hint">
+          If this persists {'>'} 5s: DevTools → Application → IndexedDB → delete HabitDB → reload.
+        </small>
       </div>
     )
   }

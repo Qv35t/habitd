@@ -3,6 +3,7 @@ import { useUIStore } from '@/stores/useUIStore'
 import { TaskItem } from './TaskItem'
 import { TaskInlineInput } from './TaskInlineInput'
 import { TaskFilterBar } from './TaskFilterBar'
+import { useTranslation } from 'react-i18next'
 import type { Task } from '@/types'
 
 interface DailyTaskListProps {
@@ -16,6 +17,7 @@ interface DailyTaskListProps {
  * Filter (all/active/done) applied from UIStore.
  */
 export function DailyTaskList({ date }: DailyTaskListProps) {
+  const { t } = useTranslation()
   const tasks = useTasksForDate(date)
   const tasksFilter = useUIStore((s) => s.tasksFilter)
 
@@ -32,14 +34,14 @@ export function DailyTaskList({ date }: DailyTaskListProps) {
   return (
     <div className="task-list">
       <div className="task-list__header">
-        <span className="task-list__title">– задачи на сегодня</span>
+        <span className="task-list__title">{t('tasks.dailyTitle')}</span>
         <TaskFilterBar scope="daily" />
       </div>
 
       <div className="task-list__items" role="list" aria-label="Daily tasks">
         {filtered.length === 0 && (
           <div className="task-list__empty">
-            {tasksFilter !== 'all' ? 'нет задач по фильтру' : 'нет задач на сегодня'}
+            {tasksFilter !== 'all' ? t('tasks.noFilter') : t('tasks.noDaily')}
           </div>
         )}
 
@@ -48,7 +50,7 @@ export function DailyTaskList({ date }: DailyTaskListProps) {
         ))}
       </div>
 
-      <TaskInlineInput scope="daily" date={date} placeholder="+ добавить задачу..." />
+      <TaskInlineInput scope="daily" date={date} placeholder={t('tasks.addDailyPlaceholder')} />
     </div>
   )
 }

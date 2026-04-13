@@ -1,28 +1,21 @@
 import { subDays, addDays, format, parseISO, isToday } from 'date-fns'
 import { useUIStore } from '@/stores/useUIStore'
+import { useTranslation } from 'react-i18next'
 
 /**
  * Date navigation for TasksView.
  *
- * Visual: ← [28 января 2026] →   [сегодня]
+ * Visual: ← [Jan 28, 2026] →   [today]
  *
- * Uses Russian month abbreviations for display.
- * Button [сегодня] shown only when active date ≠ today.
+ * Button [today] shown only when active date ≠ today.
  */
 export function DateNav() {
+  const { t } = useTranslation()
   const tasksActiveDate = useUIStore((s) => s.tasksActiveDate)
   const setTasksActiveDate = useUIStore((s) => s.setTasksActiveDate)
 
-  const monthsRu = [
-    'января', 'февраля', 'марта', 'апреля', 'мая', 'июня',
-    'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря',
-  ]
-
   const date = parseISO(tasksActiveDate + 'T00:00:00')
-  const day = date.getDate()
-  const month = monthsRu[date.getMonth()]
-  const year = date.getFullYear()
-  const label = `${day} ${month} ${year}`
+  const label = format(date, 'MMM d, yyyy').toLowerCase()
 
   function goPrev() {
     setTasksActiveDate(format(subDays(date, 1), 'yyyy-MM-dd'))
@@ -49,7 +42,7 @@ export function DateNav() {
       </button>
       {!isToday(date) && (
         <button className="date-nav__today" onClick={goToday}>
-          сегодня
+          {t('tasks.today')}
         </button>
       )}
     </div>

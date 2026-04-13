@@ -1,16 +1,18 @@
 import { useTaskCounters } from '@/hooks/useTasks'
+import { useTranslation } from 'react-i18next'
 
 interface TaskCountersProps {
   date: string
 }
 
 /**
- * Task counters: ГОТОВО / ОСТАЛОСЬ / ИТОГО + ASCII progress bar.
+ * Task counters: DONE / LEFT / TOTAL + ASCII progress bar.
  *
  * Visual:
- *   ГОТОВО: 3   ОСТАЛОСЬ: 2   ИТОГО: 5   ██████░░░░ 60%
+ *   DONE: 3   LEFT: 2   TOTAL: 5   ██████░░░░ 60%
  */
 export function TaskCounters({ date }: TaskCountersProps) {
+  const { t } = useTranslation()
   const { done, left, total, percent } = useTaskCounters(date)
 
   const barWidth = 10
@@ -23,15 +25,15 @@ export function TaskCounters({ date }: TaskCountersProps) {
   return (
     <div className="task-counters" role="status" aria-live="polite">
       <span className="task-counters__done">
-        ГОТОВО: <span className="task-counters__value">{done}</span>
+        {t('tasks.done')}: <span className="task-counters__value">{done}</span>
       </span>
       <span className="task-counters__sep">·</span>
       <span className="task-counters__left">
-        ОСТАЛОСЬ: <span className="task-counters__value">{left}</span>
+        {t('tasks.left')}: <span className="task-counters__value">{left}</span>
       </span>
       <span className="task-counters__sep">·</span>
       <span className="task-counters__total">
-        ИТОГО: <span className="task-counters__value">{total}</span>
+        {t('tasks.total')}: <span className="task-counters__value">{total}</span>
       </span>
       <span className="task-counters__bar">
         {bar} {percent}%

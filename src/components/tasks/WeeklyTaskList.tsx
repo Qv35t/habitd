@@ -1,6 +1,7 @@
-import { useTasksForWeek, getWeekRange } from '@/hooks/useTasks'
+import { useTasksForWeek } from '@/hooks/useTasks'
 import { TaskItem } from './TaskItem'
 import { TaskInlineInput } from './TaskInlineInput'
+import { useTranslation } from 'react-i18next'
 import type { Task } from '@/types'
 
 interface WeeklyTaskListProps {
@@ -10,12 +11,11 @@ interface WeeklyTaskListProps {
 /**
  * Weekly task list for the week containing the given date.
  *
- * Header shows the week range label (e.g. "28 янв – 3 фев 2026").
  * Shows inline add input for weekly tasks.
  */
 export function WeeklyTaskList({ date }: WeeklyTaskListProps) {
+  const { t } = useTranslation()
   const tasks = useTasksForWeek(date)
-  const weekRange = getWeekRange(date)
 
   if (!tasks) {
     return <div className="task-list-loading">loading...</div>
@@ -24,12 +24,12 @@ export function WeeklyTaskList({ date }: WeeklyTaskListProps) {
   return (
     <div className="task-list task-list--weekly">
       <div className="task-list__header">
-        <span className="task-list__title">– задачи на неделю ({weekRange.label})</span>
+        <span className="task-list__title">{t('tasks.weeklyTitle')}</span>
       </div>
 
       <div className="task-list__items" role="list" aria-label="Weekly tasks">
         {tasks.length === 0 && (
-          <div className="task-list__empty">нет задач на неделю</div>
+          <div className="task-list__empty">{t('tasks.noWeekly')}</div>
         )}
 
         {tasks.map((task: Task) => (
@@ -37,7 +37,7 @@ export function WeeklyTaskList({ date }: WeeklyTaskListProps) {
         ))}
       </div>
 
-      <TaskInlineInput scope="weekly" date={date} placeholder="+ добавить на неделю..." />
+      <TaskInlineInput scope="weekly" date={date} placeholder={t('tasks.addWeeklyPlaceholder')} />
     </div>
   )
 }

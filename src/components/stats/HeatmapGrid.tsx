@@ -1,6 +1,5 @@
 import type { HeatmapWeek } from '@/types'
 import { format, parseISO } from 'date-fns'
-import { ru as ruLocale } from 'date-fns/locale'
 import { useTranslation } from 'react-i18next'
 
 interface HeatmapGridProps {
@@ -20,8 +19,7 @@ const levelColors = [
  * 52-week ASCII heatmap grid, GitHub-style, terminal-aesthetic.
  */
 export function HeatmapGrid({ weeks, today }: HeatmapGridProps) {
-  const { t, i18n } = useTranslation()
-  const locale = i18n.language === 'ru' ? ruLocale : undefined
+  const { t } = useTranslation()
 
   // Build month labels — show label when month changes from previous week
   // Skip December labels that belong to the previous year (padding weeks before Jan 1)
@@ -31,7 +29,7 @@ export function HeatmapGrid({ weeks, today }: HeatmapGridProps) {
   for (const week of weeks) {
     if (week.cells.length === 0) continue
     const firstCellDate = parseISO(week.cells[0].date)
-    const month = format(firstCellDate, 'MMM', { locale })
+    const month = format(firstCellDate, 'MMM')
     // Skip December from previous year (padding weeks)
     const isFirstWeekDec = week.weekIndex === 0 && month.toLowerCase() === 'dec'
     if (isFirstWeekDec) {

@@ -99,9 +99,7 @@ export const TaskCreateSchema = z.object({
     .min(1, 'Task text is required')
     .max(200, 'Task text too long (max 200 chars)')
     .trim(),
-  scope: z.enum(['daily', 'weekly'], {
-    errorMap: () => ({ message: 'scope must be "daily" or "weekly"' }),
-  }),
+  scope: z.enum(['daily', 'weekly']),
   date: z
     .string()
     .regex(/^\d{4}-\d{2}-\d{2}$/, 'Date must be in YYYY-MM-DD format'),

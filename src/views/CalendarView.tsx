@@ -1,5 +1,4 @@
 import { format, startOfMonth, endOfMonth } from 'date-fns'
-import { ru as ruLocale } from 'date-fns/locale'
 import { useUIStore } from '@/stores/useUIStore'
 import { useActiveHabits } from '@/hooks/useHabits'
 import { useCompletionsForMonth } from '@/hooks/useCompletions'
@@ -19,8 +18,7 @@ import {
  * CalendarView — full month calendar with day detail panel.
  */
 export function CalendarView() {
-  const { t, i18n } = useTranslation()
-  const locale = i18n.language === 'ru' ? ruLocale : undefined
+  const { t } = useTranslation()
 
   const {
     calendarYear,
@@ -43,8 +41,7 @@ export function CalendarView() {
   const calendarDays = getCalendarDays(calendarYear, calendarMonth)
   const monthLabel = format(
     new Date(calendarYear, calendarMonth, 1),
-    'LLLL yyyy',
-    { locale }
+    'LLLL yyyy'
   )
 
   const today = todayYearMonth()

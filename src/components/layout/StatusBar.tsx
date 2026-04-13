@@ -3,12 +3,10 @@ import { format } from 'date-fns'
 import { db } from '@/db'
 import { useUIStore } from '@/stores/useUIStore'
 
-const APP_VERSION = '0.1.0'
-
 /**
  * Bottom status bar (like in an IDE).
  *
- * Format: habitd  •  habits: N  •  today: X/N  •  v0.1.0  •  [?]
+ * Format: habitd  •  habits: N  •  today: X/N  •  v1.0.0  •  [?]
  */
 export function StatusBar() {
   const today = format(new Date(), 'yyyy-MM-dd')
@@ -42,7 +40,7 @@ export function StatusBar() {
         </span>
       </span>
       <span className="statusbar-sep" aria-hidden="true">•</span>
-      <span className="statusbar-version">v{APP_VERSION}</span>
+      <span className="statusbar-version">v{__APP_VERSION__}</span>
       <button
         className="statusbar-help"
         onClick={() => setHelpOpen(true)}
