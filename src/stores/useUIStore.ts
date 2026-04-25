@@ -11,6 +11,7 @@
 import { create } from 'zustand'
 import { format } from 'date-fns'
 import { todayYearMonth } from '@/utils/calendar'
+import i18n from '@/i18n'
 import type {
   Habit,
   StatsPeriod,
@@ -23,7 +24,11 @@ import type {
 
 type Theme = 'terminal-dark' | 'terminal-dim'
 
-type ActiveView = 'home' | 'habits' | 'calendar' | 'week' | 'journal' | 'stats' | 'tasks' | 'settings'
+export type FinanceTab = 'overview' | 'transactions' | 'budgets' | 'goals' | 'analytics';
+
+export type LocaleLayout = 'en' | 'ru';
+
+type ActiveView = 'home' | 'habits' | 'calendar' | 'week' | 'journal' | 'stats' | 'tasks' | 'finance' | 'settings' | 'help'
 
 type ModalState =
   | { type: 'closed' }
@@ -94,6 +99,20 @@ interface UIStore {
   journalDate: string
   setJournalDate: (date: string) => void
   resetJournalToToday: () => void
+
+  // Phase F8: Finance import state
+  finImportResult: { status: import("@/types").FinanceImportStatus; transactionsImported: number; categoriesImported: number; budgetsImported: number; goalsImported: number; errorMessage?: string }
+  setFinImportResult: (r: { status: import("@/types").FinanceImportStatus; transactionsImported: number; categoriesImported: number; budgetsImported: number; goalsImported: number; errorMessage?: string }) => void
+
+  // Phase F2: FinanceView state
+  financeTab: FinanceTab
+  setFinanceTab: (tab: FinanceTab) => void
+
+  // Phase 9: Locale and selection state
+  localeLayout: LocaleLayout
+  setLocaleLayout: (layout: LocaleLayout) => void
+  selectedTxId: string | null
+  setSelectedTxId: (id: string | null) => void
 }
 
 export type { Theme }
@@ -138,8 +157,8 @@ export const useUIStore = create<UIStore>((set) => ({
   setSelectedHabitIndex: (i) => set({ selectedHabitIndex: i }),
   setHelpOpen: (v) => set({ helpOpen: v }),
   setTheme: (t) => {
-    set({ theme: t })
     localStorage.setItem('habitd-theme', t)
+    set({ theme: t })
     document.documentElement.setAttribute('data-theme', t)
   },
 
@@ -160,4 +179,22 @@ export const useUIStore = create<UIStore>((set) => ({
   journalDate: format(new Date(), 'yyyy-MM-dd'),
   setJournalDate: (date) => set({ journalDate: date }),
   resetJournalToToday: () => set({ journalDate: format(new Date(), 'yyyy-MM-dd') }),
+
+  // Phase F2
+  financeTab: 'overview' as FinanceTab,
+  setFinanceTab: (tab) => set({ financeTab: tab }),
+
+  // Phase F8
+  finImportResult: { status: 'idle', transactionsImported: 0, categoriesImported: 0, budgetsImported: 0, goalsImported: 0 },
+  setFinImportResult: (r) => set({ finImportResult: r }),
+
+  // Phase 9
+  localeLayout: (localStorage.getItem('habitd-locale') as LocaleLayout) ?? 'en',
+  setLocaleLayout: (layout) => {
+    localStorage.setItem('habitd-locale', layout)
+    i18n.changeLanguage(layout)
+    set({ localeLayout: layout })
+  },
+  selectedTxId: null,
+  setSelectedTxId: (id) => set({ selectedTxId: id }),
 }))

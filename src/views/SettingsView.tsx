@@ -1,10 +1,11 @@
 import { useTranslation } from 'react-i18next'
 import { useUIStore } from '@/stores/useUIStore'
 import { DataSection } from '@/components/settings/DataSection'
+import { FinanceDataSection } from '@/components/settings/FinanceDataSection'
 import { HabitsSection } from '@/components/settings/HabitsSection'
 import { DangerSection } from '@/components/settings/DangerSection'
 import { ConfirmModal } from '@/components/settings/ConfirmModal'
-import type { Theme } from '@/stores/useUIStore'
+import type { Theme, LocaleLayout } from '@/stores/useUIStore'
 
 /**
  * SettingsView — settings and data management screen.
@@ -14,6 +15,8 @@ export function SettingsView() {
   const {
     confirmModal,
     closeConfirmModal,
+    localeLayout,
+    setLocaleLayout,
     theme,
     setTheme,
   } = useUIStore()
@@ -45,7 +48,25 @@ export function SettingsView() {
         </div>
       </section>
 
+      {/* Locale Layout */}
+      <section className="settings-section">
+        <div className="settings-section-label">{t('settings.layout')}</div>
+        <p className="settings-section-desc">{t('settings.layoutDesc')}</p>
+        <div className="settings-toggle-group">
+          {(['en', 'ru'] as LocaleLayout[]).map((l) => (
+            <button
+              key={l}
+              className={`settings-toggle-btn ${localeLayout === l ? 'settings-toggle-btn--active' : ''}`}
+              onClick={() => setLocaleLayout(l)}
+            >
+              {l === 'en' ? 'EN — English / $' : 'RU — Русский / ₽'}
+            </button>
+          ))}
+        </div>
+      </section>
+
       <DataSection />
+      <FinanceDataSection />
       <HabitsSection />
       <DangerSection />
 

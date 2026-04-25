@@ -75,7 +75,7 @@ export function CalendarView() {
     calendarYear === today.year && calendarMonth === today.month
 
   return (
-    <main className="app-content" role="main">
+    <main className="app-content view--calendar" role="main">
       <div className="calendar-view">
         {/* Navigation bar */}
         <div className="calendar-nav">

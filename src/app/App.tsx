@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { Sidebar } from '@/components/layout/Sidebar'
 import { StatusBar } from '@/components/layout/StatusBar'
-import { HelpPanel } from '@/components/HelpPanel'
+import { HelpView } from '@/views/HelpView'
 import { HomeView } from '@/views/HomeView'
 import { HabitsView } from '@/views/HabitsView'
 import { CalendarView } from '@/views/CalendarView'
@@ -9,6 +9,7 @@ import { WeekView } from '@/views/WeekView'
 import { JournalView } from '@/views/JournalView'
 import { StatsView } from '@/views/StatsView'
 import { TasksView } from '@/views/TasksView'
+import { FinanceView } from '@/views/FinanceView'
 import { SettingsView } from '@/views/SettingsView'
 import { useUIStore } from '@/stores/useUIStore'
 import { useHotkeys } from '@/hooks/useHotkeys'
@@ -24,7 +25,9 @@ function ViewRouter() {
     case 'journal':  return <JournalView />
     case 'stats':    return <StatsView />
     case 'tasks':    return <TasksView />
+    case 'finance':  return <FinanceView />
     case 'settings': return <SettingsView />
+    case 'help':     return <HelpView />
     default:         return <HomeView />
   }
 }
@@ -49,6 +52,9 @@ export function App() {
     v: () => setActiveView('week'),
     j: () => setActiveView('journal'),
     g: () => setActiveView('home'),
+    f: () => setActiveView('finance'),
+    '/': () => setActiveView('help'),
+    '?': () => setActiveView('help'),
   }, [])
 
   return (
@@ -56,11 +62,13 @@ export function App() {
       <div className="app-shell">
         <div className="app-body">
           <Sidebar />
-          <ViewRouter />
+          <main className="app-content">
+            <ViewRouter />
+          </main>
         </div>
         <StatusBar />
       </div>
-      <HelpPanel />
+      {/* HelpPanel kept for backward compat, use HelpView as main help page */}
     </>
   )
 }

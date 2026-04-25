@@ -17,16 +17,18 @@ const DEBOUNCE_MS = 500
  * Local state only — Dexie writes happen via onSave callback.
  * Uses useEffect for local UI state sync (allowed) and flush-on-unmount.
  */
-export function JournalEditor({ entry, date, isFuture, onSave }: JournalEditorProps) {
+export function JournalEditor({ entry, date: _date, isFuture, onSave }: JournalEditorProps) {
   const [localContent, setLocalContent] = useState(entry?.content ?? '')
   const [saveState, setSaveState] = useState<SaveState>('idle')
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
-  // Sync local state when date changes or entry changes
-  useEffect(() => {
+  // Track entry id to reset local state without useEffect
+  const prevEntryIdRef = useRef<string | null>(null)
+  if (entry?.id !== prevEntryIdRef.current) {
+    prevEntryIdRef.current = entry?.id ?? null
     setLocalContent(entry?.content ?? '')
     setSaveState('idle')
-  }, [date, entry?.id])
+  }
 
   // Flush pending saves on unmount
   useEffect(() => {

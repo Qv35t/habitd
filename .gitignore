@@ -6,3 +6,8 @@ dist
 .DS_Store
 coverage
 .vite
+# Claude Code — локальные настройки (не коммитить)
+.claude/settings.local.json
+# Obsidian memory (не коммитить)
+memory/
+sessions/

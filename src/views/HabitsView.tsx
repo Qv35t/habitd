@@ -101,7 +101,7 @@ export function HabitsView() {
 
   if (habits === undefined || recentCompletions === undefined) {
     return (
-      <main className="app-content" role="main">
+      <main className="app-content view--habits" role="main">
         <div className="section-header">
           <span>– {t('nav.habits')}</span>
         </div>
@@ -124,7 +124,7 @@ export function HabitsView() {
 
   if (habits.length === 0) {
     return (
-      <main className="app-content" role="main">
+      <main className="app-content view--habits" role="main">
         <div className="section-header">
           <span>– {t('nav.habits')}</span>
           <Button variant="ghost" onClick={openAddModal} aria-label={t('habits.add')}>
@@ -148,7 +148,7 @@ export function HabitsView() {
   }
 
   return (
-    <main className="app-content" role="main">
+    <main className="app-content view--habits" role="main">
       {/* Section header */}
       <div className="section-header">
         <span>– {t('nav.habits')}</span>

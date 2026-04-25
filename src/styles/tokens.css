@@ -55,6 +55,19 @@
   --sidebar-w:   200px;
   --statusbar-h: 28px;
   --content-max: 1720px;
+  --content-w:   1720px;
+  --working-w:   calc(100vw - var(--sidebar-w));
+  --working-h:   calc(100vh - var(--statusbar-h));
+  --half-w:      calc(var(--working-w) / 2);
+  --content-w-habits: 1720px;
+  --content-w-calendar: 1720px;
+  --workspace-h: 900px;
+
+  /* === FINANCE LAYOUT (1920×1080) === */
+  --finance-content-max: 1680px;
+  --finance-col-gap: var(--sp-6);
+  --finance-sidebar-width: 380px;
+  --finance-filter-width: 320px;
 
   /* === TRANSITIONS === */
   --transition-fast:   80ms ease;

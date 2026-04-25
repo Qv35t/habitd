@@ -1,0 +1,111 @@
+.help-view {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  min-height: var(--working-h);
+  font-family: var(--font-mono);
+}
+
+.help-header {
+  width: 100%;
+  max-width: var(--working-w);
+  text-align: center;
+  padding-top: 60px;
+  margin-bottom: 48px;
+}
+
+.help-view-title {
+  font-size: var(--font-size-md);
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-bottom: var(--sp-2);
+}
+
+.help-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: 100%;
+  max-width: var(--working-w);
+  flex: 1;
+  gap: 0 var(--sp-6);
+}
+
+.help-column {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  padding: 0 var(--sp-2);
+  overflow-y: auto;
+}
+
+.help-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+
+.help-section-title {
+  font-size: var(--font-size-sm);
+  color: var(--text-primary);
+  border-bottom: 1px solid var(--border-subtle);
+  padding-bottom: var(--sp-1);
+  text-transform: lowercase;
+}
+
+.help-section-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  padding-left: var(--sp-2);
+}
+
+.help-subsection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.help-subsection-title {
+  font-size: var(--font-size-xs);
+  color: var(--text-muted);
+  text-transform: lowercase;
+  letter-spacing: 0.05em;
+}
+
+.help-desc {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.help-key-table {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: 4px var(--sp-4);
+}
+
+.help-key-row {
+  display: contents;
+}
+
+.help-key {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+  color: var(--text-primary);
+  background: var(--bg-control);
+  padding: 1px var(--sp-2);
+  border: 1px solid var(--border-default);
+  border-radius: 2px;
+  text-align: center;
+  white-space: nowrap;
+  align-self: center;
+}
+
+.help-key-desc {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  align-self: center;
+}

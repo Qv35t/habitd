@@ -17,15 +17,7 @@ interface WeekGridProps {
  * Cells call toggleCompletion() directly — no prop drilling needed.
  */
 export function WeekGrid({ data }: WeekGridProps) {
-  if (data.isLoading) {
-    return <div className="week-grid-empty">loading...</div>
-  }
-
-  if (data.habits.length === 0) {
-    return <div className="week-grid-empty">no active habits</div>
-  }
-
-  // Compute streaks for each habit
+  // Compute streaks for each habit — must be before early returns
   const streaks = useMemo<Record<string, number>>(() => {
     const today = format(new Date(), 'yyyy-MM-dd')
     const result: Record<string, number> = {}
@@ -50,6 +42,14 @@ export function WeekGrid({ data }: WeekGridProps) {
     }
     return vis
   }, [data.weekDays])
+
+  if (data.isLoading) {
+    return <div className="week-grid-empty">loading...</div>
+  }
+
+  if (data.habits.length === 0) {
+    return <div className="week-grid-empty">no active habits</div>
+  }
 
   return (
     <div className="week-grid-wrapper">

@@ -242,3 +242,358 @@ export async function exportToMarkdown(): Promise<void> {
     'text/markdown'
   )
 }
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  PHASE F8 — Finance Export / Import
+// ═══════════════════════════════════════════════════════════════════════════
+
+import { FinanceBackupSchema } from '@/schemas/finance'
+import { calcBalance, calcByCategory, calcBudgetStatus, calcGoalProgress } from '@/engine/finEngine'
+import type {
+  CsvExportOptions,
+  FinanceBackupData,
+  FinanceImportResult,
+  Transaction,
+  FinCategory,
+  Budget,
+  FinancialGoal,
+} from '@/types'
+
+// ── CSV helpers ─────────────────────────────────────────────────────────────
+
+/**
+ * Escape a CSV field value per RFC 4180.
+ */
+function escapeCsvField(value: string): string {
+  if (/[,\n\r"]/.test(value)) {
+    return `"${value.replace(/"/g, '""')}"`
+  }
+  return value
+}
+
+/**
+ * Serialize a single Transaction row to CSV string (without header).
+ */
+function txToCsvRow(tx: Transaction, categories: FinCategory[]): string {
+  const categoryName = categories.find((c) => c.id === tx.categoryId)?.name ?? tx.categoryId
+  const fields = [
+    tx.date,
+    tx.type,
+    String(tx.amount),
+    escapeCsvField(categoryName),
+    escapeCsvField(tx.note ?? ''),
+    escapeCsvField((tx.tags ?? []).join(' ')),
+    tx.id,
+    tx.createdAt,
+  ]
+  return fields.join(',')
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  CSV EXPORT — TRANSACTIONS
+// ═══════════════════════════════════════════════════════════════════════════
+
+/**
+ * Export transactions to CSV and trigger browser download.
+ * CSV includes UTF-8 BOM for Excel compatibility.
+ */
+export async function exportTransactionsCSV(options: CsvExportOptions): Promise<void> {
+  const { scope, month } = options
+
+  const [allTx, categories] = await Promise.all([
+    db.transactions.orderBy('date').toArray(),
+    db.finCategories.orderBy('sortOrder').toArray(),
+  ])
+
+  let transactions: Transaction[]
+  let filename: string
+
+  if (scope === 'month' && month) {
+    transactions = allTx.filter((tx) => tx.date.startsWith(month))
+    filename = `habitd-finance-${month}.csv`
+  } else {
+    transactions = allTx
+    const today = format(new Date(), 'yyyy-MM-dd')
+    filename = `habitd-finance-all-${today}.csv`
+  }
+
+  const CSV_HEADER = 'date,type,amount,category,note,tags,id,created_at'
+  const rows = transactions.map((tx) => txToCsvRow(tx, categories))
+
+  // UTF-8 BOM prefix
+  const csvContent = '\uFEFF' + [CSV_HEADER, ...rows].join('\n')
+
+  triggerDownload(csvContent, filename, 'text/csv;charset=utf-8;')
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  JSON EXPORT — FULL FINANCE BACKUP
+// ═══════════════════════════════════════════════════════════════════════════
+
+/**
+ * Export all four finance tables as a single JSON backup.
+ */
+export async function exportFinanceJSON(): Promise<void> {
+  const [transactions, finCategories, budgets, financialGoals] = await Promise.all([
+    db.transactions.toArray(),
+    db.finCategories.toArray(),
+    db.budgets.toArray(),
+    db.financialGoals.toArray(),
+  ])
+
+  const backup: FinanceBackupData = {
+    version: 1,
+    exportedAt: new Date().toISOString(),
+    transactions,
+    finCategories,
+    budgets,
+    financialGoals,
+  }
+
+  const dateStr = format(new Date(), 'yyyy-MM-dd')
+  triggerDownload(
+    JSON.stringify(backup, null, 2),
+    `habitd-finance-backup-${dateStr}.json`,
+    'application/json',
+  )
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  JSON IMPORT — FINANCE BACKUP RESTORE
+// ═══════════════════════════════════════════════════════════════════════════
+
+/**
+ * Import a finance backup JSON file and write to IndexedDB atomically.
+ */
+export async function importFinanceJSON(file: File): Promise<FinanceImportResult> {
+  return new Promise((resolve) => {
+    const reader = new FileReader()
+
+    reader.onload = async (e) => {
+      try {
+        const raw = e.target?.result
+        if (typeof raw !== 'string') {
+          resolve({
+            status: 'error',
+            transactionsImported: 0,
+            categoriesImported: 0,
+            budgetsImported: 0,
+            goalsImported: 0,
+            errorMessage: 'Could not read file content.',
+          })
+          return
+        }
+
+        let parsed: unknown
+        try {
+          parsed = JSON.parse(raw)
+        } catch {
+          resolve({
+            status: 'error',
+            transactionsImported: 0,
+            categoriesImported: 0,
+            budgetsImported: 0,
+            goalsImported: 0,
+            errorMessage: 'Invalid JSON — file is not a valid finance backup.',
+          })
+          return
+        }
+
+        const result = FinanceBackupSchema.safeParse(parsed)
+        if (!result.success) {
+          const msg = result.error.issues
+            .slice(0, 3)
+            .map((i) => `${i.path.join('.')} — ${i.message}`)
+            .join('; ')
+          resolve({
+            status: 'error',
+            transactionsImported: 0,
+            categoriesImported: 0,
+            budgetsImported: 0,
+            goalsImported: 0,
+            errorMessage: `Validation failed: ${msg}`,
+          })
+          return
+        }
+
+        const { transactions, finCategories, budgets, financialGoals } = result.data
+
+        await db.transaction(
+          'rw',
+          [db.transactions, db.finCategories, db.budgets, db.financialGoals],
+          async () => {
+            await db.transactions.bulkPut(transactions as Transaction[])
+            await db.finCategories.bulkPut(finCategories as FinCategory[])
+            await db.budgets.bulkPut(budgets as Budget[])
+            await db.financialGoals.bulkPut(financialGoals as FinancialGoal[])
+          },
+        )
+
+        resolve({
+          status: 'success',
+          transactionsImported: transactions.length,
+          categoriesImported: finCategories.length,
+          budgetsImported: budgets.length,
+          goalsImported: financialGoals.length,
+        })
+      } catch (err) {
+        resolve({
+          status: 'error',
+          transactionsImported: 0,
+          categoriesImported: 0,
+          budgetsImported: 0,
+          goalsImported: 0,
+          errorMessage: err instanceof Error ? err.message : 'Unknown error during import.',
+        })
+      }
+    }
+
+    reader.onerror = () => {
+      resolve({
+        status: 'error',
+        transactionsImported: 0,
+        categoriesImported: 0,
+        budgetsImported: 0,
+        goalsImported: 0,
+        errorMessage: 'FileReader error — could not open file.',
+      })
+    }
+
+    reader.readAsText(file)
+  })
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  MARKDOWN EXPORT — MONTHLY FINANCE REPORT
+// ═══════════════════════════════════════════════════════════════════════════
+
+/**
+ * Generate a Markdown summary report for the given month.
+ */
+export async function exportMonthReport(month: string): Promise<void> {
+  const from = `${month}-01`
+  const [year, mon] = month.split('-').map(Number)
+  const lastDay = new Date(year, mon, 0).getDate()
+  const to = `${month}-${String(lastDay).padStart(2, '0')}`
+
+  const [allTx, categories, budgets, goals] = await Promise.all([
+    db.transactions.toArray(),
+    db.finCategories.orderBy('sortOrder').toArray(),
+    db.budgets.toArray(),
+    db.financialGoals.toArray(),
+  ])
+
+  const monthTx = allTx.filter((tx) => tx.date >= from && tx.date <= to)
+  const today = format(new Date(), 'yyyy-MM-dd')
+
+  const balance = calcBalance(monthTx, from, to)
+  const byCat = calcByCategory(monthTx, 'expense')
+  const budgetStatus = calcBudgetStatus(monthTx, budgets, month)
+
+  function bar(pct: number): string {
+    const filled = Math.round(Math.min(pct / 100, 1) * 20)
+    return '[' + '█'.repeat(filled) + '░'.repeat(20 - filled) + ']'
+  }
+
+  const lines: string[] = [
+    `# habitd — Finance Report: ${month}`,
+    '',
+    `exported: ${today}`,
+    `period:   ${from} → ${to}`,
+    '',
+    '---',
+    '',
+    '## balance summary',
+    '',
+    `income    ${balance.income.toLocaleString().padStart(12)}`,
+    `expense   ${balance.expense.toLocaleString().padStart(12)}`,
+    `──────────────────────────`,
+    `net       ${balance.balance >= 0 ? '+' : ''}${balance.balance.toLocaleString().padStart(11)}`,
+    `savings   ${balance.savingsRate.toFixed(1).padStart(11)}%`,
+    '',
+    '---',
+    '',
+    '## top expense categories',
+    '',
+  ]
+
+  const top5 = byCat
+    .sort((a, b) => b.total - a.total)
+    .slice(0, 5)
+
+  if (top5.length === 0) {
+    lines.push('no expense transactions this month')
+  } else {
+    const maxTotal = top5[0].total
+    for (const cat of top5) {
+      const name = categories.find((c) => c.id === cat.categoryId)?.name ?? cat.categoryId
+      const pct = maxTotal > 0 ? (cat.total / maxTotal) * 100 : 0
+      lines.push(
+        `${(name).padEnd(20)}  ${bar(pct)}  ${cat.total.toLocaleString().padStart(10)}`,
+      )
+    }
+  }
+
+  lines.push('')
+  lines.push('---')
+  lines.push('')
+  lines.push('## budget status')
+  lines.push('')
+
+  if (budgetStatus.length === 0) {
+    lines.push('no budgets set for this month')
+  } else {
+    lines.push('category              spent         limit   status')
+    lines.push('────────────────────────────────────────────────────')
+    for (const bs of budgetStatus) {
+      const name = categories.find((c) => c.id === bs.categoryId)?.name ?? bs.categoryId
+      const status = bs.overBudget
+        ? '✗ over'
+        : bs.spent / bs.limit > 0.8
+        ? '⚠ warn'
+        : '✓ ok'
+      lines.push(
+        `${name.padEnd(20)}  ${String(bs.spent).padStart(10)}  ${String(bs.limit).padStart(10)}  ${status}`,
+      )
+    }
+  }
+
+  lines.push('')
+  lines.push('---')
+  lines.push('')
+  lines.push('## financial goals')
+  lines.push('')
+
+  const activeGoals = goals.filter((g) => g.status !== 'cancelled')
+  if (activeGoals.length === 0) {
+    lines.push('no active goals')
+  } else {
+    for (const goal of activeGoals) {
+      const progress = calcGoalProgress(goal, today)
+      const statusLabel =
+        goal.status === 'completed'
+          ? '★ completed'
+          : progress.onTrack
+          ? 'on track ✓'
+          : '⚠ behind'
+      lines.push(
+        `${bar(progress.percent)}  ${progress.percent.toFixed(0).padStart(3)}%  ${goal.name}  ${statusLabel}`,
+      )
+      lines.push(
+        `  ${goal.currentAmount.toLocaleString()} / ${goal.targetAmount.toLocaleString()}` +
+          (goal.deadline ? `   deadline: ${goal.deadline}` : ''),
+      )
+      lines.push('')
+    }
+  }
+
+  lines.push('---')
+  lines.push('')
+  lines.push('*generated by habitd — local-first finance tracker*')
+
+  triggerDownload(
+    lines.join('\n'),
+    `habitd-report-${month}.md`,
+    'text/markdown',
+  )
+}

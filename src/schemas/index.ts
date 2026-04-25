@@ -130,3 +130,6 @@ export function validateTaskUpdate(input: unknown): TaskUpdateInput {
   }
   return result.data
 }
+
+// ── Finance schemas (Phase F0) ────────────────────────────────────────────────
+export * from './finance'

@@ -229,6 +229,8 @@ export type ViewName =
   | 'journal'
   | 'stats'
   | 'tasks'
+  | 'finance'
+  | 'help'
   | 'settings'
 
 /** One column in the WeekGrid header (Mon–Sun). */
@@ -311,4 +313,140 @@ export interface JournalViewData {
   dateLabel: string                    // "Mon, 13 Apr 2026"
   isToday: boolean
   isFuture: boolean
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  PHASE F0 — Finance Module Types
+// ═══════════════════════════════════════════════════════════════════════════
+
+export interface Transaction {
+  id: string;           // nanoid()
+  date: string;         // "YYYY-MM-DD"
+  amount: number;       // ALWAYS positive. Direction is determined by `type`.
+  type: 'income' | 'expense';
+  categoryId: string;   // FK → FinCategory.id
+  note?: string;        // optional description, max 200 chars
+  tags?: string[];      // optional labels: ["coffee", "cafe"]
+  createdAt: string;    // ISO timestamp: new Date().toISOString()
+}
+
+export interface FinCategory {
+  id: string;
+  name: string;                          // "Еда", "Транспорт", "Зарплата"
+  type: 'income' | 'expense' | 'both';
+  symbol: string;                        // SINGLE char: "▸", "◆", "●", "◌", "▪", "◇", "⬡", "·"
+  color: 'dim' | 'bright' | 'accent';   // Terminal palette (from tokens.css)
+  isDefault: boolean;                    // true = system category, cannot delete
+  sortOrder: number;
+}
+
+export interface Budget {
+  id: string;
+  categoryId: string;   // FK → FinCategory.id
+  month: string;        // "YYYY-MM", e.g. "2026-04"
+  limitAmount: number;  // monthly spend limit
+}
+
+export interface FinancialGoal {
+  id: string;
+  name: string;              // "Buy laptop", "Emergency fund"
+  targetAmount: number;      // goal target (> 0)
+  currentAmount: number;     // amount saved so far (≥ 0)
+  deadline?: string;         // optional: "YYYY-MM-DD"
+  categoryTag?: string;      // optional category linkage
+  status: 'active' | 'completed' | 'cancelled';
+  createdAt: string;
+}
+
+// VIEW types — computed in finEngine.ts, never stored in DB
+export interface BudgetStatus {
+  categoryId: string;
+  spent: number;
+  limit: number;
+  usagePercent: number;   // 0-100+
+  overBudget: boolean;    // spent > limit
+  warning: boolean;       // usagePercent >= 80 && !overBudget
+}
+
+export interface MonthSummary {
+  month: string;
+  totalIncome: number;
+  totalExpense: number;
+  balance: number;          // totalIncome - totalExpense
+  savingsRate: number;      // (balance / totalIncome) * 100; 0 if income = 0
+  txCount: number;          // number of transactions (NOT number of categories)
+  budgetStatus: BudgetStatus[];
+}
+
+export interface GoalProgress {
+  percent: number;        // 0–100
+  remaining: number;      // targetAmount - currentAmount
+  onTrack: boolean;       // on schedule considering deadline
+  daysLeft?: number;      // if deadline exists
+  expectedPercent: number; // expected % by now (0 if no deadline)
+}
+
+// ── Computed result types for finEngine.ts ──────────────────────────
+
+export interface BalanceResult {
+  income: number;
+  expense: number;
+  balance: number;
+  savingsRate: number;    // 0-100, %
+}
+
+export interface CategoryTotal {
+  categoryId: string;
+  total: number;
+  txCount: number;        // number of transactions (not distinct!)
+  avgPerTx: number;
+}
+
+export interface TopCategory extends CategoryTotal {
+  rank: number;
+  sharePercent: number;   // % of total expenses/income
+}
+
+export interface SparklineData {
+  chars: string;          // "▁▂▃▄▅▆▇█" string
+  values: number[];       // source values (normalized >= 0)
+  max: number;
+  avg: number;
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  PHASE F8 — Finance Export / Import
+// ═══════════════════════════════════════════════════════════════════════════
+
+/** Scope for CSV export: current month or entire history. */
+export type CsvExportScope = 'month' | 'all'
+
+/** Options passed to exportTransactionsCSV(). */
+export interface CsvExportOptions {
+  scope: CsvExportScope
+  /** Required when scope === 'month'. Format: "YYYY-MM". */
+  month?: string
+}
+
+/** Full financial module backup payload — all 4 Dexie finance tables. */
+export interface FinanceBackupData {
+  version: 1
+  exportedAt: string               // ISO datetime
+  transactions: Transaction[]
+  finCategories: FinCategory[]
+  budgets: Budget[]
+  financialGoals: FinancialGoal[]
+}
+
+/** Status of a finance JSON import operation. */
+export type FinanceImportStatus = 'success' | 'error' | 'idle'
+
+/** Result returned by importFinanceJSON(). */
+export interface FinanceImportResult {
+  status: FinanceImportStatus
+  transactionsImported: number
+  categoriesImported: number
+  budgetsImported: number
+  goalsImported: number
+  errorMessage?: string
 }

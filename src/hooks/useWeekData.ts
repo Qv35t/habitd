@@ -71,5 +71,5 @@ export function useWeekData(weekOffset: number): WeekViewData {
       totalCompleted,
       completionRate,
     }
-  }, [habits, completions, weekOffset, today])
+  }, [habits, completions, refDate, today])
 }

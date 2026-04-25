@@ -7,21 +7,55 @@
     "journal": "journal",
     "stats": "stats",
     "tasks": "tasks",
-    "settings": "settings"
+    "finance": "finance",
+    "settings": "settings",
+    "help": "help"
   },
   "home": {
     "title": "HABITD",
-    "subtitle": "local-first habit tracker",
+    "subtitle": "local-first habit tracker and finance tracker",
     "sections": {
       "habits":   { "key": "[h]", "label": "habits",   "desc": "manage your daily habits" },
       "calendar": { "key": "[c]", "label": "calendar", "desc": "monthly overview with completion bars" },
       "stats":    { "key": "[s]", "label": "stats",    "desc": "52-week heatmap and streaks" },
       "tasks":    { "key": "[t]", "label": "tasks",    "desc": "daily & weekly task management" },
-      "week":     { "key": "[v]", "label": "week",     "desc": "7-day mon–sun completion grid" },
+      "week":     { "key": "[v]", "label": "week",     "desc": "7-day mon-sun completion grid" },
       "journal":  { "key": "[j]", "label": "journal",  "desc": "daily notes, mood, habit summary" },
-      "settings": { "key": "[,]", "label": "settings", "desc": "export, import, reset, theme" }
+      "finance":  { "key": "[f]", "label": "finance",  "desc": "local-first income, expense, budgets and goals" },
+      "settings": { "key": "[,]", "label": "settings", "desc": "export, import, reset, theme" },
+      "help":     { "key": "[/]", "label": "help",     "desc": "keyboard shortcuts and section reference" }
     },
-    "tip": "press ? for hotkeys"
+    "menu": {
+      "core": "CORE",
+      "extended": "EXTENDED",
+      "utility": "UTILITY",
+      "finance": "FINANCE"
+    },
+    "items": {
+      "habits": "habits",
+      "calendar": "calendar",
+      "stats": "stats",
+      "tasks": "tasks",
+      "week": "week",
+      "journal": "journal",
+      "settings": "settings",
+      "overview": "overview",
+      "transactions": "transactions",
+      "goals": "goals"
+    },
+    "descriptions": {
+      "habits": "manage your daily habits",
+      "calendar": "monthly overview with completion bars",
+      "stats": "52-week heatmap and streaks",
+      "tasks": "daily & weekly task management",
+      "week": "7-day mon-sun completion grid",
+      "journal": "daily notes, mood, habit summary",
+      "settings": "export, import, reset, theme",
+      "overview": "monthly balance & budget overview",
+      "transactions": "add & browse transactions",
+      "goals": "track saving goals"
+    },
+    "tip": "press / for help"
   },
   "habits": {
     "empty":   "no habits yet. press n to add one.",
@@ -44,28 +78,170 @@
     "addDailyPlaceholder": "+ add task...",
     "addWeeklyPlaceholder": "+ add weekly task..."
   },
+  "finance": {
+    "title": "finance",
+    "tabs": {
+      "overview":     "overview",
+      "transactions": "transactions",
+      "budgets":      "budgets",
+      "goals":        "goals",
+      "analytics":    "analytics"
+    },
+    "overview": {
+      "title":    "overview",
+      "income":   "income",
+      "expense":  "expense",
+      "balance":  "balance",
+      "savings":  "savings",
+      "savingsRate": "savings rate",
+      "thisMonth": "this month",
+      "bestMonth": "best month",
+      "worstMonth": "worst month",
+      "ytd":      "year to date"
+    },
+    "transactions": {
+      "title":    "transactions",
+      "add":      "add",
+      "edit":     "edit",
+      "delete":   "delete",
+      "save":     "save",
+      "cancel":   "cancel",
+      "type":     { "income": "income", "expense": "expense" },
+      "note":     "note",
+      "category": "category",
+      "date":     "date",
+      "amount":   "amount",
+      "all":      "all",
+      "filter":   "filter",
+      "sortBy":   "sort",
+      "sortDate": "by date",
+      "sortAmount": "by amount",
+      "empty":    "no transactions"
+    },
+    "budgets": {
+      "title":     "budgets",
+      "limit":     "limit",
+      "spent":     "spent",
+      "remaining": "remaining",
+      "overBudget": "over budget",
+      "copyPrev":  "copy from prev month",
+      "setLimit":  "set limit",
+      "clearLimit": "clear",
+      "noLimit":   "no limit set"
+    },
+    "goals": {
+      "title":     "goals",
+      "add":       "add goal",
+      "target":    "target",
+      "current":   "saved",
+      "remaining": "remaining",
+      "deadline":  "deadline",
+      "onTrack":   "on track",
+      "behind":    "behind",
+      "completed": "completed",
+      "cancelled": "cancelled",
+      "active":    "active",
+      "addFunds":  "add funds",
+      "complete":  "complete",
+      "cancel":    "cancel goal",
+      "progress":  "progress",
+      "empty":     "no goals",
+      "edit":      "edit goal",
+      "delete":    "delete goal",
+      "save":      "save",
+      "name":      "name"
+    },
+    "analytics": {
+      "title":         "analytics",
+      "heatmap":       "heatmap",
+      "trend":         "trend",
+      "topCategories": "top categories",
+      "yearSummary":   "year summary",
+      "monthlyTrend":  "monthly trend",
+      "sparkline":     "30d sparkline",
+      "yearToDate":    "year to date",
+      "avgSavings":    "avg savings"
+    },
+    "categories": {
+      "title":        "categories",
+      "add":          "add category",
+      "default":      "system",
+      "custom":       "custom",
+      "cannotDelete": "cannot delete: has transactions"
+    },
+    "common": {
+      "txCount":      "tx",
+      "transactions": "transactions",
+      "noData":       "no data for {{year}}"
+    },
+    "export": {
+      "csv":          "export CSV",
+      "csvThisMonth": "export CSV (this month)",
+      "csvAllTime":   "export CSV (all time)",
+      "json":         "JSON backup",
+      "import":       "import JSON",
+      "markdown":     "Markdown report"
+    },
+    "statusBar": {
+      "balance": "balance",
+      "month":   "month",
+      "tx":      "tx"
+    }
+  },
   "help": {
-    "title":         "keyboard shortcuts",
+    "title":         "help",
     "navigation":    "navigation",
     "actions":       "actions",
+    "hotkeys":       "finance hotkeys",
     "guide_title":   "user guide",
     "sections_label": "sections",
+    "sections": {
+      "habits":   "habits",
+      "calendar": "calendar",
+      "stats":    "stats",
+      "tasks":    "tasks",
+      "week":     "week",
+      "journal":  "journal",
+      "finance":  "finance",
+      "settings": "settings"
+    },
+    "finance": {
+      "overview":     { "desc": "monthly summary: income, expenses, balance, savings rate. ASCII budget bars. top-5 expenses. 30-day sparkline." },
+      "transactions": { "desc": "add, edit, delete transactions. filter by type. month navigation. sort by date or amount." },
+      "budgets":      { "desc": "set spending limits per category. copy from previous month. visual indicators: ok, warning, over budget." },
+      "goals":        { "desc": "financial goals with deadlines. ASCII progress bar. add funds, mark complete." },
+      "analytics":    { "desc": "52-week heatmap, monthly trends, category sparklines, year summary." },
+      "hotkeys": {
+        "1":          "tab: overview",
+        "2":          "tab: transactions",
+        "3":          "tab: budgets",
+        "4":          "tab: goals",
+        "5":          "tab: analytics",
+        "n":          "new transaction",
+        "arrowleft":  "previous month",
+        "arrowright": "next month",
+        "e":          "edit selected",
+        "d":          "delete selected",
+        "escape":     "close / deselect"
+      }
+    },
     "keys": {
       "wasdarrows": "w / s / arrows — move between habits",
       "space":      "space — toggle today",
       "n":          "n — new habit",
       "e":          "e — edit selected",
       "d":          "d — delete selected",
-      "question":   "? — toggle this panel",
+      "question":   "/ — help",
       "esc":        "esc — close modal",
       "h":          "h — habits view",
       "c":          "c — calendar view",
       "sview":      "s — stats view",
       "comma":      ", — settings",
-      "t":          "[t] — tasks view",
-      "v":          "[v] — week view",
-      "j":          "[j] — journal view",
-      "g":          "[g] — go home"
+      "t":          "t — tasks view",
+      "v":          "v — week view",
+      "j":          "j — journal view",
+      "g":          "g — go home",
+      "f":          "f — finance view"
     },
     "guide": {
       "home":     { "title": "home",     "desc": "dashboard with quick access to all sections. press the section key or click to navigate." },
@@ -75,6 +251,7 @@
       "tasks":    { "title": "tasks",    "desc": "daily and weekly task lists. tasks reset automatically (daily at midnight, weekly on monday). mark done with [space] or click." },
       "week":     { "title": "week",     "desc": "7-day mon–sun grid. toggle habit completions inline. navigate weeks with [←] [→]. streaks shown as badges." },
       "journal":  { "title": "journal",  "desc": "one note per day. pick a mood (1–5), write notes, see habit summary. auto-saves with 500ms debounce." },
+      "finance":  { "title": "finance",  "desc": "track income, expenses, budgets and goals. all data stored locally. export to CSV or JSON backup." },
       "settings": { "title": "settings", "desc": "export data as json or markdown, import backup, reset all data, switch theme." }
     }
   },
@@ -133,6 +310,8 @@
   "settings": {
     "title":          "settings",
     "theme":          "theme",
+    "layout":         "layout",
+    "layoutDesc":     "language, date format and currency",
     "export":         "export",
     "import":         "import",
     "reset":          "reset data",
@@ -144,6 +323,7 @@
     "importJsonDesc": "restore from a habitd backup file",
     "exportMd":       "[export markdown]",
     "exportMdDesc":   "plain-text habit report",
+    "financeData":    "finance data",
     "archiveSection": "habits",
     "noArchived":     "no archived habits",
     "dangerZone":     "danger zone",

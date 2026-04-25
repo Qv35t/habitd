@@ -1,55 +1,57 @@
 import { useTranslation } from 'react-i18next'
 import { useUIStore } from '@/stores/useUIStore'
 import { useHotkeys } from '@/hooks/useHotkeys'
+import type { FinanceTab } from '@/stores/useUIStore'
 
-interface HomeNavItemProps {
-  navKey: string
-  view: string
-  onNavigate: (view: string) => void
+interface NavItemProps {
+  shortcut: string
+  label: string
+  desc: string
+  onClick: () => void
 }
 
-function HomeNavItem({ navKey, view, onNavigate }: HomeNavItemProps) {
-  const { t } = useTranslation()
+function NavItem({ shortcut, label, desc, onClick }: NavItemProps) {
   return (
-    <button
-      className="home-nav-item"
-      onClick={() => onNavigate(view)}
-    >
-      <span className="home-nav-key">{t(`home.sections.${navKey}.key`)}</span>
-      <span className="home-nav-label">{t(`home.sections.${navKey}.label`)}</span>
-      <span className="home-nav-desc">{t(`home.sections.${navKey}.desc`)}</span>
+    <button className="home-nav-item" onClick={onClick}>
+      <span className="home-nav-key">{shortcut}</span>
+      <span className="home-nav-label">{label}</span>
+      <span className="home-nav-desc">{desc}</span>
     </button>
   )
 }
 
-const SECTIONS = [
-  { key: 'habits',   view: 'habits'   },
-  { key: 'calendar', view: 'calendar' },
-  { key: 'stats',    view: 'stats'    },
-  { key: 'tasks',    view: 'tasks'    },
-  { key: 'week',     view: 'week'     },
-  { key: 'journal',  view: 'journal'  },
-  { key: 'settings', view: 'settings' },
-] as const
+interface FinanceNavItemProps {
+  label: string
+  desc: string
+  onClick: () => void
+}
+
+function FinanceNavItem({ label, desc, onClick }: FinanceNavItemProps) {
+  return (
+    <button className="home-nav-item" onClick={onClick}>
+      <span className="home-nav-key" />
+      <span className="home-nav-label">{label}</span>
+      <span className="home-nav-desc">{desc}</span>
+    </button>
+  )
+}
 
 /**
- * HomeView — welcome screen with navigation to all views.
+ * HomeView — welcome screen with two-panel navigation layout.
+ * Left panel: CORE / EXTENDED / UTILITY menus.
+ * Right panel: FINANCE menu with tab navigation.
  */
 export function HomeView() {
   const { t } = useTranslation()
-  const { setActiveView } = useUIStore()
+  const { setActiveView, setFinanceTab } = useUIStore()
 
-  const navigate = (view: string) => setActiveView(view as Parameters<typeof setActiveView>[0])
+  const navigate = (view: string) =>
+    setActiveView(view as Parameters<typeof setActiveView>[0])
 
-  const primarySections = SECTIONS.filter(s =>
-    ['habits', 'calendar', 'stats'].includes(s.view)
-  )
-  const extendedSections = SECTIONS.filter(s =>
-    ['tasks', 'week', 'journal'].includes(s.view)
-  )
-  const utilitySections = SECTIONS.filter(s =>
-    ['settings'].includes(s.view)
-  )
+  const navigateFinance = (tab: FinanceTab) => {
+    setActiveView('finance')
+    setFinanceTab(tab)
+  }
 
   useHotkeys({
     t: () => navigate('tasks'),
@@ -64,30 +66,40 @@ export function HomeView() {
         <p className="home-subtitle">{t('home.subtitle')}</p>
       </header>
 
-      <div className="home-nav-groups">
-        {/* Group 1: Core */}
-        <nav className="home-nav home-nav--core">
-          <span className="home-nav-group-label">– core</span>
-          {primarySections.map(({ key, view }) => (
-            <HomeNavItem key={key} navKey={key} view={view} onNavigate={navigate} />
-          ))}
-        </nav>
+      <div className="home-panels">
+        <div className="home-panel-left">
+          <div className="home-panel-inner">
+            <nav className="home-nav home-nav--core">
+              <span className="home-nav-group-label">{t('home.menu.core')}</span>
+              <NavItem shortcut="[h]" label={t('home.items.habits')} desc={t('home.descriptions.habits')} onClick={() => navigate('habits')} />
+              <NavItem shortcut="[c]" label={t('home.items.calendar')} desc={t('home.descriptions.calendar')} onClick={() => navigate('calendar')} />
+              <NavItem shortcut="[s]" label={t('home.items.stats')} desc={t('home.descriptions.stats')} onClick={() => navigate('stats')} />
+            </nav>
 
-        {/* Group 2: Extended */}
-        <nav className="home-nav home-nav--extended">
-          <span className="home-nav-group-label">– extended</span>
-          {extendedSections.map(({ key, view }) => (
-            <HomeNavItem key={key} navKey={key} view={view} onNavigate={navigate} />
-          ))}
-        </nav>
+            <nav className="home-nav home-nav--extended">
+              <span className="home-nav-group-label">{t('home.menu.extended')}</span>
+              <NavItem shortcut="[t]" label={t('home.items.tasks')} desc={t('home.descriptions.tasks')} onClick={() => navigate('tasks')} />
+              <NavItem shortcut="[v]" label={t('home.items.week')} desc={t('home.descriptions.week')} onClick={() => navigate('week')} />
+              <NavItem shortcut="[j]" label={t('home.items.journal')} desc={t('home.descriptions.journal')} onClick={() => navigate('journal')} />
+            </nav>
 
-        {/* Group 3: Utility */}
-        <nav className="home-nav home-nav--utility">
-          <span className="home-nav-group-label">– utility</span>
-          {utilitySections.map(({ key, view }) => (
-            <HomeNavItem key={key} navKey={key} view={view} onNavigate={navigate} />
-          ))}
-        </nav>
+            <nav className="home-nav home-nav--utility">
+              <span className="home-nav-group-label">{t('home.menu.utility')}</span>
+              <NavItem shortcut="[,]" label={t('home.items.settings')} desc={t('home.descriptions.settings')} onClick={() => navigate('settings')} />
+            </nav>
+          </div>
+        </div>
+
+        <div className="home-panel-right">
+          <div className="home-panel-inner">
+            <nav className="home-nav home-nav--finance">
+              <span className="home-nav-group-label">{t('home.menu.finance')}</span>
+              <NavItem shortcut="[f]" label={t('home.items.overview')} desc={t('home.descriptions.overview')} onClick={() => navigateFinance('overview')} />
+              <FinanceNavItem label={t('home.items.transactions')} desc={t('home.descriptions.transactions')} onClick={() => navigateFinance('transactions')} />
+              <FinanceNavItem label={t('home.items.goals')} desc={t('home.descriptions.goals')} onClick={() => navigateFinance('goals')} />
+            </nav>
+          </div>
+        </div>
       </div>
 
       <footer className="home-footer">
