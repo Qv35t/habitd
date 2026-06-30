@@ -77,8 +77,15 @@ export function CalendarView() {
   return (
     <main className="app-content view--calendar" role="main">
       <div className="calendar-view">
+        {/* Headline */}
+        <div className="headline">
+          <div className="date">CALENDAR</div>
+          <h1>{monthLabel.toLowerCase().split(' ')[0]} <span className="accent">{calendarYear}</span></h1>
+          <div className="sub">each square is one day. inked days hold the habits you kept.</div>
+        </div>
+
         {/* Navigation bar */}
-        <div className="calendar-nav">
+        <div className="calendar-nav cal-nav">
           <Button variant="ghost" onClick={goToPrevMonth} aria-label={t('calendar.prevMonth')}>
             {t('calendar.prevMonth')}
           </Button>

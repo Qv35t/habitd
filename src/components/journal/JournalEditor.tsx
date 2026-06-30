@@ -23,9 +23,11 @@ export function JournalEditor({ entry, date: _date, isFuture, onSave }: JournalE
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   // Track entry id to reset local state without useEffect
+  // Normalize undefined → null so that null entry doesn't cause infinite re-renders
   const prevEntryIdRef = useRef<string | null>(null)
-  if (entry?.id !== prevEntryIdRef.current) {
-    prevEntryIdRef.current = entry?.id ?? null
+  const entryId = entry?.id ?? null
+  if (entryId !== prevEntryIdRef.current) {
+    prevEntryIdRef.current = entryId
     setLocalContent(entry?.content ?? '')
     setSaveState('idle')
   }

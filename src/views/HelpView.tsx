@@ -33,9 +33,12 @@ export function HelpView() {
 
   return (
     <main className="help-view" aria-label={t('help.title')}>
-      <header className="help-header">
-        <h1 className="help-view-title">{t('help.title')}</h1>
-      </header>
+      {/* Headline */}
+      <div className="headline">
+        <div className="date">HELP</div>
+        <h1>keyboard <span className="accent">shortcuts</span></h1>
+        <div className="sub">all the keys that move through habitd — a reference card.</div>
+      </div>
 
       <div className="help-columns">
         {/* LEFT: Navigation + Habits/Calendar/Stats/Tasks/Journal */}

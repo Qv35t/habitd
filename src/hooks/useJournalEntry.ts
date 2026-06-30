@@ -41,9 +41,8 @@ export function useJournalEntry(date: string): JournalViewData & {
   )
 
   const data = useMemo<JournalViewData>(() => {
-    // Only habits and completions being undefined means "still loading from Dexie"
-    // entry can be undefined (no record yet) — valid non-loading state
-    if (habits === undefined || completions === undefined) {
+    // Use null checks for loading state
+    if (habits == null || completions == null || !Array.isArray(habits)) {
       return {
         isLoading: true,
         entry: null,
@@ -57,7 +56,7 @@ export function useJournalEntry(date: string): JournalViewData & {
       }
     }
 
-    const resolvedEntry = entry !== undefined ? entry : null
+    const resolvedEntry = Array.isArray(entry) ? entry[0] || null : (entry || null)
     const completedIds = new Set(completions.map(c => c.habitId))
     const habitItems = habits.map(h => ({
       id: h.id,
@@ -82,7 +81,8 @@ export function useJournalEntry(date: string): JournalViewData & {
       isToday: date === today,
       isFuture: isJournalDateFuture(date, today),
     }
-  }, [entry, habits, completions, date, today])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [habits?.length, completions?.length, entry?.id, date, today])
 
   /** Upserts the journal entry content for the current date. */
   const saveContent = useCallback(async (content: string) => {

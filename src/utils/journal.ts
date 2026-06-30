@@ -2,36 +2,49 @@
  * Pure journal utility functions — no side effects, no Dexie calls.
  * All dates are YYYY-MM-DD strings.
  */
-import { format, parseISO, addDays, subDays, isAfter } from 'date-fns'
+import { format, parseISO, addDays, subDays, isAfter, isValid } from 'date-fns'
 import type { JournalEntry, MoodLevel } from '../types'
 
 /**
  * Returns a human-readable date label for the JournalNav header.
  * Format: "Mon, 13 Apr 2026"
+ * Returns fallback for invalid dates to prevent RangeError crashes.
  */
 export function getJournalDateLabel(date: string): string {
-  return format(parseISO(date), 'EEE, d MMM yyyy')
+  const parsed = parseISO(date)
+  if (!isValid(parsed)) return 'Invalid date'
+  return format(parsed, 'EEE, d MMM yyyy')
 }
 
 /**
  * Returns the YYYY-MM-DD of the previous day.
+ * Falls back to today if date is invalid.
  */
 export function getPrevJournalDate(date: string): string {
-  return format(subDays(parseISO(date), 1), 'yyyy-MM-dd')
+  const parsed = parseISO(date)
+  if (!isValid(parsed)) return format(new Date(), 'yyyy-MM-dd')
+  return format(subDays(parsed, 1), 'yyyy-MM-dd')
 }
 
 /**
  * Returns the YYYY-MM-DD of the next day.
+ * Falls back to today if date is invalid.
  */
 export function getNextJournalDate(date: string): string {
-  return format(addDays(parseISO(date), 1), 'yyyy-MM-dd')
+  const parsed = parseISO(date)
+  if (!isValid(parsed)) return format(new Date(), 'yyyy-MM-dd')
+  return format(addDays(parsed, 1), 'yyyy-MM-dd')
 }
 
 /**
  * Returns true if date is strictly after today.
+ * Returns false for invalid dates.
  */
 export function isJournalDateFuture(date: string, today: string): boolean {
-  return isAfter(parseISO(date), parseISO(today))
+  const parsed = parseISO(date)
+  const todayParsed = parseISO(today)
+  if (!isValid(parsed) || !isValid(todayParsed)) return false
+  return isAfter(parsed, todayParsed)
 }
 
 /**

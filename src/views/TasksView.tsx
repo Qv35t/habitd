@@ -18,6 +18,13 @@ export function TasksView() {
 
   return (
     <div className="tasks-view">
+      {/* Headline */}
+      <div className="headline">
+        <div className="date">{tasksActiveDate} · TASKS</div>
+        <h1>to-<span className="accent">do</span></h1>
+        <div className="sub">press the dot to mark the task closed. things that wait, weigh.</div>
+      </div>
+
       <DateNav />
       <TaskCounters date={tasksActiveDate} />
       <DailyTaskList date={tasksActiveDate} />

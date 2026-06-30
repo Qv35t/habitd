@@ -18,6 +18,13 @@ export function WeekView() {
 
   return (
     <div className="week-view">
+      {/* Headline */}
+      <div className="headline">
+        <div className="date">WEEK</div>
+        <h1>{data.weekLabel}</h1>
+        <div className="sub">seven days pressed into one row · ink fills where you kept the habit.</div>
+      </div>
+
       <WeekNav
         weekLabel={data.weekLabel}
         weekOffset={weekOffset}

@@ -27,6 +27,13 @@ export function JournalView() {
 
   return (
     <div className="journal-view">
+      {/* Headline */}
+      <div className="headline">
+        <div className="date">JOURNAL</div>
+        <h1>daily <span className="accent">reflection</span></h1>
+        <div className="sub">notes, mood, and habits — a snapshot of each day.</div>
+      </div>
+
       <JournalNav
         date={journalDate}
         dateLabel={data.dateLabel}

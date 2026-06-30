@@ -33,13 +33,14 @@ function ViewRouter() {
 }
 
 export function App() {
-  const { theme, setActiveView } = useUIStore()
+  const { theme, scheme, setActiveView } = useUIStore()
 
   // Apply theme on mount and clear stale language setting
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme)
+    document.documentElement.setAttribute('data-scheme', scheme)
     localStorage.removeItem('habitd-lang')
-  }, [theme])
+  }, [theme, scheme])
 
   // Global view-switching hotkeys
   useHotkeys({

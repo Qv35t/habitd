@@ -5,6 +5,7 @@ import { FinanceDataSection } from '@/components/settings/FinanceDataSection'
 import { HabitsSection } from '@/components/settings/HabitsSection'
 import { DangerSection } from '@/components/settings/DangerSection'
 import { ConfirmModal } from '@/components/settings/ConfirmModal'
+import { SchemeSwitcher } from '@/components/settings/SchemeSwitcher'
 import type { Theme, LocaleLayout } from '@/stores/useUIStore'
 
 /**
@@ -28,6 +29,13 @@ export function SettingsView() {
 
   return (
     <div className="settings-view">
+      {/* Headline */}
+      <div className="headline">
+        <div className="date">SETTINGS</div>
+        <h1>configure <span className="accent">habitd</span></h1>
+        <div className="sub">theme, color scheme, data management — all in one place.</div>
+      </div>
+
       <div className="settings-header">
         <span className="section-label">{t('settings.title')}</span>
       </div>
@@ -46,6 +54,13 @@ export function SettingsView() {
             </button>
           ))}
         </div>
+      </section>
+
+      {/* Color Scheme */}
+      <section className="settings-section">
+        <div className="settings-section-label">{t('settings.scheme.title')}</div>
+        <p className="settings-section-desc">{t('settings.scheme.desc')}</p>
+        <SchemeSwitcher />
       </section>
 
       {/* Locale Layout */}

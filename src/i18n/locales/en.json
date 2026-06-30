@@ -55,7 +55,30 @@
       "transactions": "add & browse transactions",
       "goals": "track saving goals"
     },
-    "tip": "press / for help"
+    "tip": "press / for help",
+    "hero": {
+      "title": "today's",
+      "accent": "log",
+      "sub": "two habits left to set before the day closes. press on."
+    },
+    "sheets": {
+      "done":    { "tag": "DONE", "note": "habits set today" },
+      "streak":  { "tag": "STREAK", "unit": "days" },
+      "balance": { "tag": "BALANCE", "note": "this month" }
+    },
+    "progress": {
+      "label": "today's press"
+    },
+    "sectionsShort": {
+      "habits": "habits",
+      "finance": "finance"
+    }
+  },
+  "drum": {
+    "reminder": {
+      "title": "Daily reminder",
+      "desc": "fill tonight, before the press cools"
+    }
   },
   "habits": {
     "empty":   "no habits yet. press n to add one.",
@@ -329,7 +352,14 @@
     "dangerZone":     "danger zone",
     "resetBtn":       "[reset data]",
     "resetDesc":      "permanently delete all habits and records",
-    "resetHint":      "type \"reset\" in the confirmation dialog to proceed"
+    "resetHint":      "type \"reset\" in the confirmation dialog to proceed",
+    "scheme": {
+      "title": "INK DRUMS",
+      "sun-sea": "Sun & Sea",
+      "flora": "Flora",
+      "midnight": "Midnight Crush",
+      "copperplate": "Copperplate"
+    }
   },
   "common": {
     "confirm": "confirm",

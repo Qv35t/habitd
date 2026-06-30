@@ -11,3 +11,11 @@ coverage
 # Obsidian memory (не коммитить)
 memory/
 sessions/
+# Local AI tools
+QWEN.md
+# Local session log
+Сессия.md
+# Build artifacts
+tsconfig.app.tsbuildinfo
+# Local design references (photos, mockups)
+Редизайн/

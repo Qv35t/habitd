@@ -102,10 +102,11 @@ export function HabitsView() {
   if (habits === undefined || recentCompletions === undefined) {
     return (
       <main className="app-content view--habits" role="main">
-        <div className="section-header">
-          <span>– {t('nav.habits')}</span>
+        <div className="headline">
+          <div className="date">SECTION</div>
+          <h1>{t('nav.habits')}</h1>
+          <div className="sub">loading...</div>
         </div>
-        <p className="text-muted">loading...</p>
       </main>
     )
   }
@@ -125,14 +126,19 @@ export function HabitsView() {
   if (habits.length === 0) {
     return (
       <main className="app-content view--habits" role="main">
-        <div className="section-header">
-          <span>– {t('nav.habits')}</span>
-          <Button variant="ghost" onClick={openAddModal} aria-label={t('habits.add')}>
-            [+ {t('habits.add')}]
-          </Button>
+        <div className="headline">
+          <div className="date">SECTION</div>
+          <h1>{t('nav.habits')} · <span className="accent">0</span></h1>
+          <div className="sub">{t('habits.empty')}</div>
         </div>
-        <div className="habit-list-empty">
-          <p className="text-muted">{t('habits.empty')}</p>
+
+        <div className="section-head">
+          <h2>{t('habits.list') || 'all habits'}</h2>
+          <div className="right">
+            <Button variant="default" className="pill" onClick={openAddModal} aria-label={t('habits.add')}>
+              + {t('habits.add')}
+            </Button>
+          </div>
         </div>
 
         {/* Modals must render even in empty state */}
@@ -149,12 +155,21 @@ export function HabitsView() {
 
   return (
     <main className="app-content view--habits" role="main">
-      {/* Section header */}
-      <div className="section-header">
-        <span>– {t('nav.habits')}</span>
-        <Button variant="ghost" onClick={openAddModal} aria-label={t('habits.add')}>
-          [+ {t('habits.add')}]
-        </Button>
+      {/* Headline */}
+      <div className="headline">
+        <div className="date">SECTION</div>
+        <h1>{t('nav.habits')} · <span className="accent">{habits.length}</span></h1>
+        <div className="sub">{t('habits.manage') || 'manage your daily routines — set, reorder, archive.'}</div>
+      </div>
+
+      {/* Filter pills */}
+      <div className="section-head">
+        <h2>{t('habits.list') || 'all habits'}</h2>
+        <div className="right">
+          <Button variant="default" className="pill" onClick={openAddModal} aria-label={t('habits.add')}>
+            + {t('habits.add')}
+          </Button>
+        </div>
       </div>
 
       {/* Draggable list */}
@@ -183,10 +198,12 @@ export function HabitsView() {
       </DndContext>
 
       {/* Add habit button */}
-      <div className="habit-list-add">
-        <Button variant="ghost" onClick={openAddModal}>
-          [+ {t('habits.add')}]
-        </Button>
+      <div className="section-head" style={{ marginTop: 12 }}>
+        <div className="right">
+          <Button variant="default" className="pill" onClick={openAddModal}>
+            + {t('habits.add')}
+          </Button>
+        </div>
       </div>
 
       {/* Add modal */}

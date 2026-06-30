@@ -31,6 +31,13 @@ export function StatsView() {
 
   return (
     <div className="stats-view">
+      {/* Headline */}
+      <div className="headline">
+        <div className="date">STATISTICS</div>
+        <h1>{t('stats.title')} · <span className="accent">{statsPeriod}</span></h1>
+        <div className="sub">a year pressed into one block — the darker the square, the deeper the streak.</div>
+      </div>
+
       {/* ── Summary Cards ── */}
       <section className="stats-section">
         <div className="stats-section-header">{t('stats.summary')}</div>

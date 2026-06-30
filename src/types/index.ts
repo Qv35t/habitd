@@ -450,3 +450,11 @@ export interface FinanceImportResult {
   goalsImported: number
   errorMessage?: string
 }
+
+// ═══════════════════════════════════════════════════════════════
+//  SCHEME — Risograph ink-drum color scheme
+// ═══════════════════════════════════════════════════════════════
+
+export type SchemeName = 'sun-sea' | 'flora' | 'midnight' | 'copperplate'
+
+export const SCHEME_NAMES: SchemeName[] = ['sun-sea', 'flora', 'midnight', 'copperplate']

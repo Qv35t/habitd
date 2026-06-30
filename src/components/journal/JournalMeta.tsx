@@ -1,4 +1,4 @@
-import { format, parseISO } from 'date-fns'
+import { format, parseISO, isValid } from 'date-fns'
 import type { SaveState } from '../../types'
 
 interface JournalMetaProps {
@@ -28,7 +28,10 @@ export function JournalMeta({ wordCount, saveState, updatedAt }: JournalMetaProp
 
   let saveDisplay = indicator
   if (saveState === 'saved' && updatedAt !== null) {
-    saveDisplay = `${indicator} ${format(parseISO(updatedAt), 'HH:mm')}`
+    const parsed = parseISO(updatedAt)
+    if (isValid(parsed)) {
+      saveDisplay = `${indicator} ${format(parsed, 'HH:mm')}`
+    }
   }
 
   if (wordCount === 0) {

@@ -1,96 +1,184 @@
 :root,
-[data-theme="terminal-dark"] {
-  /* === BACKGROUNDS === */
-  --bg-base:    #000000;
-  --bg-panel:   #080808;
-  --bg-control: #0f0f0f;
-  --bg-hover:   #111111;
-  --bg-surface:  #0d0d0d;
-  --bg-elevated: #1a1a1a;
+[data-scheme="sun-sea"] {
+  /* ═══ PAPER ═══ */
+  --paper:       #FBF3E4;
+  --paper-soft:  #F4E9D2;
+  --paper-3:     #FFFDF7;
 
-  /* === TEXT HIERARCHY === */
-  --text-primary:   #f0f0f0;
-  --text-secondary: #b0b0b0;
-  --text-muted:     #707070;
-  --text-label:     #c8c8c8;
-  --text-accent:    #e0e0e0;
+  /* ═══ RISO INKS ═══ */
+  --ink-a:       #FF6B1A;     /* fluorescent orange */
+  --ink-b:       #00786D;     /* deep teal */
+  --ink:         #1A1612;
 
-  /* === BORDERS === */
-  --border-subtle:  #222222;
-  --border-default: #383838;
-  --border-active:  #686868;
+  /* ═══ TEXT ═══ */
+  --text-primary:   var(--ink);
+  --text-secondary: #3D3530;
+  --text-muted:     #8A7F76;
+  --text-dim:       #8A7F76;
+  --text-on-gradient: var(--paper-3);
+  --text-link:      var(--ink);
 
-  /* === ACCENT STATES === */
-  --accent-dim:    #666666;
-  --accent-bright: #e8e8e8;
-  --accent-red:    #884444;
-  --accent-red-bg: #3a1a1a;
+  /* ═══ RULES ═══ */
+  --rule:    rgba(26,22,18,0.14);
+  --rule-2:  rgba(26,22,18,0.32);
+  --border-card:    var(--ink);
+  --border-input:   rgba(26,22,18,0.32);
+  --border-divider: var(--rule);
+  --border-active:  var(--ink);
+  --border-subtle:  var(--rule);
+  --border-default: var(--rule-2);
 
-  /* === COLORS === */
-  --color-green:  #7ecb7e;
-  --color-red:    #e07070;
-  --color-yellow: #d4c97a;
+  /* ═══ LEGACY BG ALIASES (keep old class names working) ═══ */
+  --bg-page:     var(--paper);
+  --bg-base:     var(--paper);
+  --bg-card:     var(--paper-3);
+  --bg-panel:    var(--paper-3);
+  --bg-control:  var(--paper-soft);
+  --bg-input:    var(--paper-soft);
+  --bg-hover:    var(--paper-soft);
+  --bg-surface:  var(--paper-soft);
+  --bg-elevated: var(--paper-3);
+  --bg-sidebar:  var(--paper);
+  --bg-overlay:  rgba(26,22,18,0.5);
 
-  /* === TYPOGRAPHY === */
-  --font-mono: 'JetBrains Mono', 'Courier New', monospace;
-  --font-size-xs:   10px;
-  --font-size-sm:   11px;
-  --font-size-base: 12px;
-  --font-size-md:   13px;
-  --font-size-lg:   16px;
-  --font-size-xl:   20px;
-  --font-weight-light:  300;
-  --font-weight-normal: 400;
+  /* ═══ LEGACY ACCENT ALIASES ═══ */
+  --accent-lime:    var(--ink-a);
+  --accent-lime-soft: rgba(255,107,26,0.15);
+  --accent-green:   var(--ink-b);
+  --accent-red:     var(--ink-a);
+  --accent-red-bg:  rgba(255,107,26,0.1);
+  --accent-orange:  var(--ink-a);
+  --accent-blue:    var(--ink-b);
+  --accent-dim:     var(--text-dim);
+  --accent-bright:  var(--text-primary);
+  --color-green:    var(--ink-b);
+  --color-red:      var(--ink-a);
+  --color-yellow:   var(--ink-a);
+  --text-label:     var(--text-secondary);
+  --text-accent:    var(--text-primary);
 
-  /* === SPACING === */
-  --sp-1: 4px;
-  --sp-2: 8px;
-  --sp-3: 12px;
-  --sp-4: 16px;
-  --sp-6: 24px;
-  --sp-8: 32px;
-  --sp-12: 48px;
+  /* ═══ TYPOGRAPHY ═══ */
+  --font-ui:      'Space Grotesk', 'Inter', -apple-system, sans-serif;
+  --font-display: var(--font-ui);
+  --font-body:    var(--font-ui);
+  --font-mono:    'Space Mono', 'JetBrains Mono', 'SF Mono', monospace;
 
-  /* === LAYOUT === */
-  --sidebar-w:   200px;
-  --statusbar-h: 28px;
-  --content-max: 1720px;
-  --content-w:   1720px;
+  --fw-light:    300;
+  --fw-regular:  400;
+  --fw-medium:   500;
+  --fw-semibold: 600;
+  --fw-bold:     700;
+  --font-weight-light:  var(--fw-light);
+  --font-weight-normal: var(--fw-regular);
+
+  --fs-2xs:  10px;
+  --fs-xs:   11px;
+  --fs-sm:   12px;
+  --fs-base: 13px;
+  --fs-md:   14px;
+  --fs-lg:   16px;
+  --fs-xl:   20px;
+  --fs-2xl:  28px;
+  --fs-3xl:  40px;
+  --fs-hero: 56px;
+  --font-size-xs:   var(--fs-xs);
+  --font-size-sm:   var(--fs-sm);
+  --font-size-base: var(--fs-base);
+  --font-size-md:   var(--fs-md);
+  --font-size-lg:   var(--fs-lg);
+  --font-size-xl:   var(--fs-xl);
+  --font-size-2xl:  var(--fs-2xl);
+
+  /* ═══ SPACING ═══ */
+  --sp-0:   0px;
+  --sp-0-5: 2px;
+  --sp-1:   4px;
+  --sp-1-5: 6px;
+  --sp-2:   8px;
+  --sp-2-5: 10px;
+  --sp-3:   12px;
+  --sp-4:   16px;
+  --sp-5:   20px;
+  --sp-6:   24px;
+  --sp-8:   32px;
+  --sp-10:  40px;
+  --sp-12:  48px;
+  --sp-16:  64px;
+
+  /* ═══ BORDER RADIUS (risograph: slightly smaller, harder) ═══ */
+  --radius-sm:   6px;
+  --radius-md:   8px;
+  --radius-lg:   10px;
+  --radius-xl:   12px;
+  --radius-2xl:  14px;
+  --radius-full: 9999px;
+
+  /* ═══ SHADOWS (hard offset, NO blur — risograph ink press) ═══ */
+  --shadow-none:  none;
+  --shadow-sm:    2px 2px 0 var(--ink);
+  --shadow-md:    3px 3px 0 var(--ink);
+  --shadow-lg:    4px 4px 0 var(--ink);
+  --shadow-xl:    6px 6px 0 var(--ink);
+  --shadow-hero:  8px 8px 0 var(--ink);
+  --shadow-inset: none;
+
+  /* ═══ HALFTONE & OVERPRINT ═══ */
+  --halftone-size: 7px;
+  --halftone-size-thin: 8px;
+  --halftone-size-dense: 5px;
+  --halftone-opacity: 0.32;
+
+  /* ═══ MOTION ═══ */
+  --ease-fast:   80ms ease;
+  --ease-normal: 150ms ease;
+  --ease-smooth: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-spring: 300ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  --transition-fast:   var(--ease-fast);
+  --transition-normal: var(--ease-normal);
+
+  /* ═══ LAYOUT ═══ */
+  --sidebar-w:   248px;
+  --statusbar-h: 32px;
+  --content-max: calc(100vw - var(--sidebar-w) - var(--sp-6) * 2);
+  --content-w:   calc(100vw - var(--sidebar-w) - var(--sp-6) * 2);
   --working-w:   calc(100vw - var(--sidebar-w));
-  --working-h:   calc(100vh - var(--statusbar-h));
+
   --half-w:      calc(var(--working-w) / 2);
-  --content-w-habits: 1720px;
-  --content-w-calendar: 1720px;
+  --content-w-habits: calc(100vw - var(--sidebar-w) - var(--sp-6) * 2);
+  --content-w-calendar: calc(100vw - var(--sidebar-w) - var(--sp-6) * 2);
   --workspace-h: 900px;
+  --finance-content-max: calc(100vw - var(--sidebar-w) - var(--sp-6) * 2);
+  --finance-col-gap: var(--sp-5);
+  --finance-sidebar-width: 280px;
+  --finance-filter-width: 240px;
 
-  /* === FINANCE LAYOUT (1920×1080) === */
-  --finance-content-max: 1680px;
-  --finance-col-gap: var(--sp-6);
-  --finance-sidebar-width: 380px;
-  --finance-filter-width: 320px;
-
-  /* === TRANSITIONS === */
-  --transition-fast:   80ms ease;
-  --transition-normal: 150ms ease;
+  transition: background-color 300ms ease, color 300ms ease;
 }
 
-/* THEME: terminal-dim (daytime) */
-[data-theme="terminal-dim"] {
-  --bg-base:        #1a1a1a;
-  --bg-panel:       #202020;
-  --bg-control:     #2a2a2a;
-  --bg-hover:       #333333;
-  --bg-surface:     #242424;
-  --bg-elevated:    #2e2e2e;
-  --text-primary:   #eeeeee;
-  --text-secondary: #c0c0c0;
-  --text-muted:     #909090;
-  --text-label:     #d0d0d0;
-  --text-accent:    #e8e8e8;
-  --border-subtle:  #2e2e2e;
-  --border-default: #444444;
-  --border-active:  #787878;
-  --color-green:    #7ecb7e;
-  --color-red:      #e07070;
-  --color-yellow:   #d4c97a;
+/* ═══ ALT SCHEMES — switchable via [data-scheme] on <html> ═══ */
+[data-scheme="flora"] {
+  --paper: #F4EEDD;
+  --paper-soft: #EBE3CC;
+  --paper-3: #FAF5E8;
+  --ink-a: #2D5016;
+  --ink-b: #E8A838;
+  --ink: #1A1612;
+}
+
+[data-scheme="midnight"] {
+  --paper: #EEE6F2;
+  --paper-soft: #E1D5EA;
+  --paper-3: #FBF6FB;
+  --ink-a: #5B2A86;
+  --ink-b: #C0234A;
+  --ink: #1A1612;
+}
+
+[data-scheme="copperplate"] {
+  --paper: #F7F0E4;
+  --paper-soft: #EBE1CE;
+  --paper-3: #FFFCF4;
+  --ink-a: #1C3A5C;
+  --ink-b: #C5532E;
+  --ink: #1A1612;
 }

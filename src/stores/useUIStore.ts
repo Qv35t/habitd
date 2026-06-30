@@ -20,6 +20,7 @@ import type {
   ConfirmModalState,
   ImportResult,
   TaskFilter,
+  SchemeName,
 } from '@/types'
 
 type Theme = 'terminal-dark' | 'terminal-dim'
@@ -113,6 +114,10 @@ interface UIStore {
   setLocaleLayout: (layout: LocaleLayout) => void
   selectedTxId: string | null
   setSelectedTxId: (id: string | null) => void
+
+  // Risograph ink-drum scheme
+  scheme: SchemeName
+  setScheme: (s: SchemeName) => void
 }
 
 export type { Theme }
@@ -197,4 +202,12 @@ export const useUIStore = create<UIStore>((set) => ({
   },
   selectedTxId: null,
   setSelectedTxId: (id) => set({ selectedTxId: id }),
+
+  // Risograph scheme — persisted, mirrors to <html data-scheme>
+  scheme: (localStorage.getItem('habitd-scheme') as SchemeName) ?? 'sun-sea',
+  setScheme: (scheme) => {
+    localStorage.setItem('habitd-scheme', scheme)
+    document.documentElement.setAttribute('data-scheme', scheme)
+    set({ scheme })
+  },
 }))
