@@ -384,7 +384,7 @@ All engine functions: pure, zero-I/O, deterministic, covered by unit tests.
 │                     │                                │
 │  – nav              │  – finance                     │
 │                     │                                │
-│  -  finance          │  [overview] [transactions] [goals]
+│  -  finance         │  [overview] [transactions] [goals]
 │    settings         │                                │
 │    help             │  income   [████████████░░░░] 12 400 ₽
 │                     │  expense  [████████░░░░░░░░]  9 200 ₽
@@ -646,4 +646,198 @@ When working in this repo:
 - Before any Finance work: run `grep -rn "TODO\|stub\|FIXME" src/` to find blockers
 - Commit scope: one phase or one feature cluster per commit
 
+---
+
+## ERROR MEMORY PROTOCOL
+
+### Purpose
+
+When Qwen Code encounters an error during implementation, it must not guess or
+apply a single fix blindly. Instead, it follows a structured three-phase loop:
+discover all candidate solutions, apply the best one, and permanently record the
+lesson so the same mistake is never made twice.
+
+### Phase 1 — Error Triage
+
+When any error is detected (TypeScript compile error, test failure, runtime
+exception, lint violation):
+
+1. **Classify** the error by type:
+    - `TYPE` — TypeScript type mismatch or missing type
+    - `LOGIC` — incorrect algorithm output or broken edge case
+    - `IMPORT` — missing or wrong module reference
+    - `SCHEMA` — Zod validation failure
+    - `DB` — Dexie query or migration issue
+    - `STYLE` — Tailwind class conflict or broken token reference
+    - `TEST` — failing assertion in Vitest
+2. **Extract** the minimal reproduction context:
+    - File path + line number
+    - Error message verbatim
+    - Affected function / component name
+3. **Do not patch in isolation.** Collect all candidates before touching code.
+
+### Phase 2 — Solution Enumeration
+
+Before writing a single line of fix code, enumerate at least **two candidate
+solutions** for every non-trivial error. Format:
+
 ```
+[CANDIDATE A] — description of approach, why it works, side effects
+[CANDIDATE B] — description of approach, why it works, side effects
+[SELECTED]    — chosen candidate + reason (performance / correctness / minimal diff)
+```
+
+Selection criteria (in priority order):
+
+1. Correctness — does it fully eliminate the root cause?
+2. Minimal diff — fewest changed lines for lowest regression risk.
+3. Consistency — matches existing patterns in the codebase.
+4. Testability — does it remain unit-testable?
+
+Apply only the selected candidate.
+
+### Phase 3 — Memory Commit
+
+After every fix, append a record to the internal session memory. The record
+must follow this schema:
+
+```
+ERROR_MEMORY {
+  id:        <short-uuid or incremental index>
+  date:      <ISO date>
+  file:      <relative path>
+  type:      <TYPE | LOGIC | IMPORT | SCHEMA | DB | STYLE | TEST>
+  symptom:   <one-line error description>
+  root:      <one-line root cause>
+  fix:       <one-line description of applied solution>
+  prevent:   <rule to avoid this error class in the future>
+}
+```
+
+Example:
+
+```
+ERROR_MEMORY {
+  id:       001
+  date:     2026-04-11
+  file:     src/engine/streakEngine.ts
+  type:     LOGIC
+  symptom:  calculateCurrentStreak returns 0 when today has a completion
+  root:     Comparison used strict UTC midnight vs local date string
+  fix:      Normalize all dates to YYYY-MM-DD via date-fns/format before compare
+  prevent:  Always pass dates through formatISO(date, {representation:'date'})
+            before any streak or calendar computation
+}
+```
+
+
+### Memory Application Rules
+
+Before writing new code in any session, Qwen Code must:
+
+- Scan committed `ERROR_MEMORY` entries relevant to the current file or domain.
+- If a matching `prevent` rule exists, apply it **proactively** — not after
+another failure.
+- Never repeat a fix that already has a logged `ERROR_MEMORY` entry for the
+same `root` cause.
+
+
+### Constraints
+
+- Do not create `ERROR_MEMORY` entries for trivial typos fixed inline.
+- One entry per unique root cause, not per occurrence.
+- `prevent` must be an actionable rule, not a vague observation.
+- If the same root cause recurs despite an existing entry, escalate by adding
+a corresponding unit test to `test/` that guards against regression.
+
+---
+
+## DOCUMENTATION \& FILE OWNERSHIP
+
+### Spec files are product artifacts
+
+Spec files in `/mnt/c/project/Habit_md/` = single source of truth per phase.
+Non-technical stakeholders read them to understand what was built.
+
+**Rules for any spec file change:**
+
+- Keep language precise and implementation-agnostic where possible.
+- Sync phase status in this file (`## PHASE STATUS`) immediately after a phase
+completes — never let status drift from code reality.
+- If a feature ships or is removed, update the spec first, then the code.
+- Never fabricate or round benchmark/test numbers — use real `vitest --coverage` output.
+- Adding a new phase → add its spec file row to `## SPEC FILES REFERENCE`.
+
+
+### Single source of truth rule
+
+| What | Canonical location | Never edit in |
+| :-- | :-- | :-- |
+| All CSS custom properties | `src/styles/tokens.css` | Component files inline |
+| Type definitions | `src/types/index.ts` | Ad-hoc per-component interfaces |
+| i18n strings | `src/i18n/locales/en.json` + `ru.json` | Component JSX directly |
+| Zod schemas | `src/schemas/index.ts` + `finance.ts` | Inline in hooks or components |
+| Engine logic | `src/engine/streakEngine.ts` + `finEngine.ts` | Components or hooks |
+| DB schema | `src/db/schema.ts` | Any other file |
+
+When a canonical file changes, propagate the update everywhere it is consumed
+before closing the task.
+
+### Agent integrity rules
+
+- Benchmark and coverage numbers must come from real runs. Never estimate.
+- `prevent` rules in `ERROR_MEMORY` entries must be actionable, not vague.
+- Phase status must reflect actual code state — not aspirational.
+- Before declaring a phase complete: `pnpm test:run` must pass with 0 failures
+and `pnpm type-check` must emit 0 errors.
+- Commit scope: one phase or one feature cluster per commit. Never bundle
+unrelated changes.
+
+---
+
+## CAVEMAN PROJECT CONTEXT
+
+> Secondary project. Path: separate repo. Agent rule file: `CLAUDE.md` (caveman).
+> Reference this section when asked to work on the caveman codebase.
+
+Caveman is a Claude Code plugin + multi-agent skill that compresses AI responses
+into caveman-style prose (~65–75% token reduction, full technical accuracy).
+
+### File ownership (caveman repo)
+
+| File | What it controls |
+| :-- | :-- |
+| `skills/caveman/SKILL.md` | Core caveman behavior — **only file to edit for behavior changes** |
+| `rules/caveman-activate.md` | Always-on auto-activation rule — **edit here, never in agent copies** |
+| `skills/caveman-commit/SKILL.md` | Commit message behavior (independent skill) |
+| `skills/caveman-review/SKILL.md` | Code review behavior (independent skill) |
+| `caveman-compress/SKILL.md` | Compress sub-skill behavior |
+
+### Auto-synced files — do NOT edit directly
+
+CI overwrites these on every push to main. Edits will be lost:
+`.clinerules/caveman.md`, `.github/copilot-instructions.md`,
+`.cursor/rules/caveman.mdc`, `.windsurf/rules/caveman.md`,
+all `plugins/` and `.cursor/skills/` SKILL.md copies, `caveman.skill` ZIP.
+
+### Hook rules (caveman)
+
+- All hook files must **silent-fail** on filesystem errors — never block session start.
+- Any flag file write must go through `safeWriteFlag()` in `caveman-config.js`.
+Direct `fs.writeFileSync` on predictable paths reopens symlink-clobber attack surface.
+- Hooks must respect `CLAUDE_CONFIG_DIR` env var — never hardcode `~/.claude`.
+- `hooks/package.json` pins `{"type": "commonjs"}` — required, do not remove.
+
+
+### Key agent rules (caveman)
+
+- Edit `skills/caveman/SKILL.md` for behavior changes. Never touch synced copies.
+- Edit `rules/caveman-activate.md` for auto-activation changes. Never touch agent-specific copies.
+- README is the most important user-facing file — optimize for non-technical readers.
+- Preserve caveman voice in README: "Brain still big." "Cost go down forever." Intentional brand.
+- Benchmark numbers come from real runs in `benchmarks/`. Never fabricate or round.
+- After PR merge, wait for CI workflow to complete before declaring release done.
+- Eval delta = **skill vs terse** (not skill vs baseline) — baseline comparison is misleading.
+
+```
+
